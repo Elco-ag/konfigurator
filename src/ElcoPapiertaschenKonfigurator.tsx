@@ -1,10 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // ============================================================================
-// PRICING DATA & ENGINE (KORRIGIERT AUS EXCEL)
+// TYPES
 // ============================================================================
 
-const PRICE_DATA = {
+type HandleType = 'flachhenkel' | 'kordelhenkel';
+type ColorType = 'braun' | 'weiss';
+type PrintType = '1/0' | '1/1' | '4/0' | '4/4';
+
+interface PriceRules {
+  tiers: number[];
+  min_qty: number;
+  setup_per_side: number;
+  shipping_per_1000: number;
+  min_shipping: number;
+}
+
+interface PriceTier {
+  [qty: string]: number;
+}
+
+interface PrintPrices {
+  [print: string]: PriceTier;
+}
+
+interface FormatPrices {
+  [format: string]: PrintPrices;
+}
+
+interface ColorPrices {
+  [color: string]: FormatPrices;
+}
+
+interface HandlePrices {
+  [handle: string]: ColorPrices;
+}
+
+interface PriceData {
+  rules: PriceRules;
+  data: HandlePrices;
+}
+
+interface Selection {
+  handle: string;
+  color: string;
+  format: string;
+  print: string;
+  qty: number;
+}
+
+interface PriceResult {
+  tier: number;
+  unit: number;
+  shipping: number;
+  total: number;
+  unitEffective: number;
+  nextTier?: {
+    tier: number;
+    savingsPercent: number;
+    savingsAmount: number;
+  };
+}
+
+interface PriceError {
+  error: string;
+  message: string;
+}
+
+// ============================================================================
+// PRICING DATA & ENGINE
+// ============================================================================
+
+const PRICE_DATA: PriceData = {
   "rules": {
     "tiers": [100, 200, 500, 1000, 2000, 5000],
     "min_qty": 50,
@@ -200,7 +267,7 @@ const PRICE_DATA = {
 // PRICING ENGINE
 // ============================================================================
 
-function chooseTier(qty, rules) {
+function chooseTier(qty: number, rules: PriceRules): number | null {
   if (qty < rules.min_qty) return null;
   let selected = rules.tiers[0];
   for (const tier of rules.tiers) {
@@ -210,7 +277,7 @@ function chooseTier(qty, rules) {
   return selected;
 }
 
-function calcPrice(selection, priceData) {
+function calcPrice(selection: Selection, priceData: PriceData): PriceResult | PriceError {
   const { handle, color, format, print, qty } = selection;
   const { rules, data } = priceData;
   
@@ -224,7 +291,7 @@ function calcPrice(selection, priceData) {
   }
   
   try {
-    const unitPrice = data[handle]?.[color]?.[format]?.[print]?.[tier];
+    const unitPrice = data[handle]?.[color]?.[format]?.[print]?.[tier.toString()];
     if (typeof unitPrice !== 'number') {
       return { error: 'no_price_found', message: 'Preis nicht verfügbar' };
     }
@@ -235,11 +302,11 @@ function calcPrice(selection, priceData) {
     const unitEffective = unit;
     
     const tierIndex = rules.tiers.indexOf(tier);
-    let nextTier = null;
+    let nextTier = undefined;
     if (tierIndex < rules.tiers.length - 1) {
       const nextTierValue = rules.tiers[tierIndex + 1];
       const nextResult = calcPrice({ ...selection, qty: nextTierValue }, priceData);
-      if (!nextResult.error) {
+      if (!('error' in nextResult)) {
         const savings = unit - nextResult.unit;
         const savingsPercent = (savings / unit) * 100;
         nextTier = {
@@ -256,14 +323,14 @@ function calcPrice(selection, priceData) {
   }
 }
 
-function formatPrice(price, decimals = 2) {
+function formatPrice(price: number, decimals: number = 2): string {
   return new Intl.NumberFormat('de-CH', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(price);
 }
 
-function formatPriceCHF(price, decimals = 2) {
+function formatPriceCHF(price: number, decimals: number = 2): string {
   return `${formatPrice(price, decimals)} CHF`;
 }
 
@@ -272,19 +339,19 @@ function formatPriceCHF(price, decimals = 2) {
 // ============================================================================
 
 export default function ElcoPapiertaschenKonfigurator() {
-  const [handle, setHandle] = useState(null);
-  const [color, setColor] = useState(null);
-  const [format, setFormat] = useState(null);
-  const [print, setPrint] = useState(null);
-  const [qty, setQty] = useState('');
-  const [qtyError, setQtyError] = useState('');
+  const [handle, setHandle] = useState<HandleType | null>(null);
+  const [color, setColor] = useState<ColorType | null>(null);
+  const [format, setFormat] = useState<string | null>(null);
+  const [print, setPrint] = useState<PrintType | null>(null);
+  const [qty, setQty] = useState<string>('');
+  const [qtyError, setQtyError] = useState<string>('');
   
-  const [company, setCompany] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [showToast, setShowToast] = useState(false);
+  const [company, setCompany] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [showToast, setShowToast] = useState<boolean>(false);
   
   const priceResult = handle && color && format && print && qty && parseInt(qty) >= 50
     ? calcPrice({ handle, color, format, print, qty: parseInt(qty) }, PRICE_DATA)
@@ -327,7 +394,7 @@ export default function ElcoPapiertaschenKonfigurator() {
       return;
     }
     
-    if (!priceResult || priceResult.error) {
+    if (!priceResult || 'error' in priceResult) {
       alert('Bitte vollständige Konfiguration wählen');
       return;
     }
@@ -357,6 +424,10 @@ Ich hänge mein Logo an. Danke für die Rückmeldung innert 24 h.`);
     
     setShowToast(true);
     setTimeout(() => setShowToast(false), 5000);
+  };
+  
+  const isPriceResultValid = (result: PriceResult | PriceError | null): result is PriceResult => {
+    return result !== null && !('error' in result);
   };
   
   return (
@@ -507,7 +578,7 @@ Ich hänge mein Logo an. Danke für die Rückmeldung innert 24 h.`);
                     <h2 className="text-2xl font-bold text-gray-900">Druckart wählen</h2>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {['1/0', '1/1', '4/0', '4/4'].map(p => (
+                    {(['1/0', '1/1', '4/0', '4/4'] as PrintType[]).map(p => (
                       <button
                         key={p}
                         onClick={() => setPrint(p)}
@@ -555,7 +626,7 @@ Ich hänge mein Logo an. Danke für die Rückmeldung innert 24 h.`);
                       step="10"
                       value={qty}
                       onChange={(e) => setQty(e.target.value)}
-                      onWheel={(e) => e.target.blur()}
+                      onWheel={(e) => (e.target as HTMLInputElement).blur()}
                       placeholder="z.B. 500"
                       className={`w-full p-5 text-3xl font-bold border-2 rounded-xl transition-all ${
                         qtyError 
@@ -611,7 +682,7 @@ Ich hänge mein Logo an. Danke für die Rückmeldung innert 24 h.`);
                 <div className="p-6">
                   <h2 className="text-3xl font-bold mb-6 text-gray-900">Ihr Preis</h2>
                   
-                  {priceResult && !priceResult.error ? (
+                  {isPriceResultValid(priceResult) ? (
                     <>
                       <div className="space-y-4 mb-6">
                         <div className="flex justify-between items-baseline pb-3 border-b border-emerald-200">
@@ -675,7 +746,7 @@ Ich hänge mein Logo an. Danke für die Rückmeldung innert 24 h.`);
               </div>
               
               {/* Kontaktformular */}
-              {priceResult && !priceResult.error && (
+              {isPriceResultValid(priceResult) && (
                 <div className="animate-fade-in bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                   <h2 className="text-2xl font-bold mb-5 text-gray-900">Ihre Kontaktdaten</h2>
                   <div className="grid gap-4">
