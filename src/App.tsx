@@ -1,7 +1,7 @@
-import React from "react";
-import ElcoPapiertaschenKonfigurator from "./ElcoPapiertaschenKonfigurator";
-import "./index.css";
+import ElcoPapiertaschenKonfigurator from './ElcoPapiertaschenKonfigurator'
 
-export default function App() {
-  return <ElcoPapiertaschenKonfigurator />;
+function App() {
+  return <ElcoPapiertaschenKonfigurator />
 }
+
+export default App
