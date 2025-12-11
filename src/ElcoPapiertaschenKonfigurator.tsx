@@ -310,36 +310,36 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
-  // Auto-Scroll when new sections appear
+  // Smooth auto-scroll to keep both columns visible
   useEffect(() => {
     if (handle && !color) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 150);
+        window.scrollBy({ top: 150, behavior: 'smooth' });
+      }, 200);
     }
   }, [handle]);
   
   useEffect(() => {
     if (color && !format) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 150);
+        window.scrollBy({ top: 150, behavior: 'smooth' });
+      }, 200);
     }
   }, [color]);
   
   useEffect(() => {
     if (format && !print) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 150);
+        window.scrollBy({ top: 150, behavior: 'smooth' });
+      }, 200);
     }
   }, [format]);
   
   useEffect(() => {
     if (print) {
       setTimeout(() => {
-        window.scrollBy({ top: 250, behavior: 'smooth' });
-      }, 150);
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 200);
     }
   }, [print]);
   
@@ -412,8 +412,7 @@ ${firstName} ${lastName}`);
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8" 
-      style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
+    <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" style={{minHeight: '100vh', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
       <div className="max-w-7xl mx-auto">
         
         <div className="grid lg:grid-cols-3 gap-8">
@@ -745,7 +744,7 @@ ${firstName} ${lastName}`);
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Price Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6">
                 <h2 className="text-lg text-gray-900 mb-6" style={{fontWeight: 700}}>Preiskalkulation</h2>
                 
