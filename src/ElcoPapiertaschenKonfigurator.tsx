@@ -310,11 +310,11 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
-  // Smooth auto-scroll to keep both columns visible - always 200px
+  // Smooth auto-scroll - 250px per step
   useEffect(() => {
     if (handle && !color) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
+        window.scrollBy({ top: 250, behavior: 'smooth' });
       }, 200);
     }
   }, [handle]);
@@ -322,7 +322,7 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (color && !format) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
+        window.scrollBy({ top: 250, behavior: 'smooth' });
       }, 200);
     }
   }, [color]);
@@ -330,7 +330,7 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (format && !print) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
+        window.scrollBy({ top: 250, behavior: 'smooth' });
       }, 200);
     }
   }, [format]);
@@ -338,7 +338,7 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (print) {
       setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
+        window.scrollBy({ top: 250, behavior: 'smooth' });
       }, 200);
     }
   }, [print]);
@@ -742,10 +742,11 @@ ${firstName} ${lastName}`);
           </div>
           
           {/* Sidebar */}
-          {/* Right Sidebar - NOT sticky, scrolls with content */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Price Card - NO sticky positioning */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          {/* Right Sidebar - scrolls naturally with content */}
+          <div className="lg:col-span-1">
+            <div className="space-y-6">
+              {/* Price Card */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6">
                 <h2 className="text-lg text-gray-900 mb-6" style={{fontWeight: 700}}>Preiskalkulation</h2>
                 
