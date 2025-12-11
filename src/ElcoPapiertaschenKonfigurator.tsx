@@ -310,63 +310,38 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
-  // Auto-Scroll only when needed to show new sections
+  // Auto-Scroll when new sections appear
   useEffect(() => {
     if (handle && !color) {
       setTimeout(() => {
-        const element = document.getElementById('color-section');
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Only scroll if element is below viewport
-          if (rect.bottom > window.innerHeight) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
-          }
-        }
-      }, 100);
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 150);
     }
-  }, [handle, color]);
+  }, [handle]);
   
   useEffect(() => {
     if (color && !format) {
       setTimeout(() => {
-        const element = document.getElementById('format-section');
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.bottom > window.innerHeight) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
-          }
-        }
-      }, 100);
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 150);
     }
-  }, [color, format]);
+  }, [color]);
   
   useEffect(() => {
     if (format && !print) {
       setTimeout(() => {
-        const element = document.getElementById('print-section');
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.bottom > window.innerHeight) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
-          }
-        }
-      }, 100);
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 150);
     }
-  }, [format, print]);
+  }, [format]);
   
   useEffect(() => {
-    if (print && !qty) {
+    if (print) {
       setTimeout(() => {
-        const element = document.getElementById('qty-section');
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.bottom > window.innerHeight) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
-          }
-        }
-      }, 100);
+        window.scrollBy({ top: 250, behavior: 'smooth' });
+      }, 150);
     }
-  }, [print, qty]);
+  }, [print]);
   
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
