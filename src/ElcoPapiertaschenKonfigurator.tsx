@@ -247,7 +247,7 @@ function formatPriceCHF(price, decimals = 2) {
 const ELCO_RED = '#e63027';
 
 // ============================================================================
-// MAIN COMPONENT - Clean Design with Minimal Red Accents
+// MAIN COMPONENT - Linear Flow Design
 // ============================================================================
 
 export default function PapiertragetaschenKalkulator() {
@@ -310,7 +310,7 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
-  // Smooth auto-scroll - 250px per step
+  // Auto-scroll - 250px per step
   useEffect(() => {
     if (handle && !color) {
       setTimeout(() => {
@@ -343,11 +343,11 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [print]);
   
-  // Scroll to price when quantity is entered
+  // Scroll to price section when quantity is entered - bigger scroll
   useEffect(() => {
     if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error) {
       setTimeout(() => {
-        window.scrollBy({ top: 400, behavior: 'smooth' });
+        window.scrollBy({ top: 700, behavior: 'smooth' });
       }, 300);
     }
   }, [qty, priceResult]);
@@ -421,73 +421,130 @@ ${firstName} ${lastName}`);
   };
   
   return (
-    <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" style={{minHeight: '100vh', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
+    <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" 
+      style={{minHeight: '100vh', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
       <div className="max-w-4xl mx-auto">
         
-        {/* Main Configuration */}
-        <div className="mb-8">
-            {/* Progress Indicator - Schwarz */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between relative">
-                {/* Progress Line */}
-                <div className="absolute left-0 top-5 w-full h-0.5 bg-gray-200"></div>
-                <div 
-                  className="absolute left-0 top-5 h-0.5 bg-gray-900 transition-all duration-700"
-                  style={{
-                    width: `${(handle ? 20 : 0) + (color ? 20 : 0) + (format ? 20 : 0) + (print ? 20 : 0) + (qty && !qtyError ? 20 : 0)}%`
-                  }}
-                />
-                
-                {/* Progress Steps */}
-                {[
-                  { label: 'Henkel', active: handle },
-                  { label: 'Farbe', active: color },
-                  { label: 'Format', active: format },
-                  { label: 'Druck', active: print },
-                  { label: 'Menge', active: qty && !qtyError }
-                ].map((step, idx) => (
-                  <div key={idx} className="relative flex flex-col items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm transition-all ${
-                      step.active 
-                        ? 'bg-gray-900 text-white shadow-lg scale-110' 
-                        : 'bg-white border-2 border-gray-200 text-gray-400'
-                    }`}
-                      style={{fontWeight: 700}}>
-                      {idx + 1}
-                    </div>
-                    <span className={`text-xs mt-2 ${step.active ? 'text-gray-900' : 'text-gray-400'}`}
-                      style={{fontWeight: step.active ? 700 : 400}}>
-                      {step.label}
-                    </span>
+        {/* Configuration Section */}
+        <div className="mb-12">
+          {/* Progress Indicator */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between relative">
+              {/* Progress Line */}
+              <div className="absolute left-0 top-5 w-full h-0.5 bg-gray-200"></div>
+              <div 
+                className="absolute left-0 top-5 h-0.5 bg-gray-900 transition-all duration-700"
+                style={{
+                  width: `${(handle ? 20 : 0) + (color ? 20 : 0) + (format ? 20 : 0) + (print ? 20 : 0) + (qty && !qtyError ? 20 : 0)}%`
+                }}
+              />
+              
+              {/* Progress Steps */}
+              {[
+                { label: 'Henkel', active: handle },
+                { label: 'Farbe', active: color },
+                { label: 'Format', active: format },
+                { label: 'Druck', active: print },
+                { label: 'Menge', active: qty && !qtyError }
+              ].map((step, idx) => (
+                <div key={idx} className="relative flex flex-col items-center">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm transition-all ${
+                    step.active 
+                      ? 'bg-gray-900 text-white shadow-lg scale-110' 
+                      : 'bg-white border-2 border-gray-200 text-gray-400'
+                  }`}
+                    style={{fontWeight: 700}}>
+                    {idx + 1}
                   </div>
-                ))}
+                  <span className={`text-xs mt-2 ${step.active ? 'text-gray-900' : 'text-gray-400'}`}
+                    style={{fontWeight: step.active ? 700 : 400}}>
+                    {step.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Configuration Card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {/* 1. Henkelform */}
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
+                Henkelform
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setHandle('flachhenkel')}
+                  className={`relative p-6 rounded-xl transition-all border-2 ${
+                    handle === 'flachhenkel' 
+                      ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
+                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
+                  }`}
+                  style={handle === 'flachhenkel' ? {borderColor: ELCO_RED} : {}}
+                >
+                  <span className="text-2xl mb-2 block">🛍️</span>
+                  <div style={{fontWeight: 700}}>Flachhenkel</div>
+                  <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>
+                    Klassisch & bewährt
+                  </div>
+                  {handle === 'flachhenkel' && (
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center" 
+                      style={{backgroundColor: ELCO_RED}}>
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  )}
+                </button>
+                <button
+                  onClick={() => setHandle('kordelhenkel')}
+                  className={`relative p-6 rounded-xl transition-all border-2 ${
+                    handle === 'kordelhenkel' 
+                      ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
+                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
+                  }`}
+                  style={handle === 'kordelhenkel' ? {borderColor: ELCO_RED} : {}}
+                >
+                  <span className="text-2xl mb-2 block">🛍️</span>
+                  <div style={{fontWeight: 700}}>Kordelhenkel</div>
+                  <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>
+                    Premium & elegant
+                  </div>
+                  {handle === 'kordelhenkel' && (
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                      style={{backgroundColor: ELCO_RED}}>
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  )}
+                </button>
               </div>
             </div>
             
-            {/* Card Design */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              {/* 1. Henkelform */}
-              <div className="p-6 border-b border-gray-100">
+            {/* 2. Farbe */}
+            {handle && (
+              <div id="color-section" className="p-6 border-b border-gray-100">
                 <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                  Henkelform
+                  Farbe
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <button
-                    onClick={() => setHandle('flachhenkel')}
+                    onClick={() => setColor('braun')}
                     className={`relative p-6 rounded-xl transition-all border-2 ${
-                      handle === 'flachhenkel' 
+                      color === 'braun' 
                         ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
                     }`}
-                    style={handle === 'flachhenkel' ? {borderColor: ELCO_RED} : {}}
+                    style={color === 'braun' ? {borderColor: ELCO_RED} : {}}
                   >
-                    <span className="text-2xl mb-2 block">🛍️</span>
-                    <div style={{fontWeight: 700}}>Flachhenkel</div>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 to-amber-400 mx-auto mb-3 shadow-md"></div>
+                    <div style={{fontWeight: 700}}>Braun</div>
                     <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>
-                      Klassisch & bewährt
+                      Natürlich & nachhaltig
                     </div>
-                    {handle === 'flachhenkel' && (
-                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center" 
+                    {color === 'braun' && (
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
                         style={{backgroundColor: ELCO_RED}}>
                         <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
@@ -496,20 +553,20 @@ ${firstName} ${lastName}`);
                     )}
                   </button>
                   <button
-                    onClick={() => setHandle('kordelhenkel')}
+                    onClick={() => setColor('weiss')}
                     className={`relative p-6 rounded-xl transition-all border-2 ${
-                      handle === 'kordelhenkel' 
+                      color === 'weiss' 
                         ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
                     }`}
-                    style={handle === 'kordelhenkel' ? {borderColor: ELCO_RED} : {}}
+                    style={color === 'weiss' ? {borderColor: ELCO_RED} : {}}
                   >
-                    <span className="text-2xl mb-2 block">🛍️</span>
-                    <div style={{fontWeight: 700}}>Kordelhenkel</div>
+                    <div className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 mx-auto mb-3 shadow-md"></div>
+                    <div style={{fontWeight: 700}}>Weiss</div>
                     <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>
-                      Premium & elegant
+                      Edel & vielseitig
                     </div>
-                    {handle === 'kordelhenkel' && (
+                    {color === 'weiss' && (
                       <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
                         style={{backgroundColor: ELCO_RED}}>
                         <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -520,426 +577,378 @@ ${firstName} ${lastName}`);
                   </button>
                 </div>
               </div>
-              
-              {/* 2. Farbe */}
-              {handle && (
-                <div id="color-section" className="p-6 border-b border-gray-100">
-                  <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                    Farbe
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => setColor('braun')}
-                      className={`relative p-6 rounded-xl transition-all border-2 ${
-                        color === 'braun' 
-                          ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
-                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
-                      }`}
-                      style={color === 'braun' ? {borderColor: ELCO_RED} : {}}
-                    >
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 to-amber-400 mx-auto mb-3 shadow-md"></div>
-                      <div style={{fontWeight: 700}}>Braun</div>
-                      <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>
-                        Natürlich & nachhaltig
-                      </div>
-                      {color === 'braun' && (
-                        <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
-                          style={{backgroundColor: ELCO_RED}}>
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                          </svg>
-                        </div>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => setColor('weiss')}
-                      className={`relative p-6 rounded-xl transition-all border-2 ${
-                        color === 'weiss' 
-                          ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
-                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
-                      }`}
-                      style={color === 'weiss' ? {borderColor: ELCO_RED} : {}}
-                    >
-                      <div className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 mx-auto mb-3 shadow-md"></div>
-                      <div style={{fontWeight: 700}}>Weiss</div>
-                      <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>
-                        Edel & vielseitig
-                      </div>
-                      {color === 'weiss' && (
-                        <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
-                          style={{backgroundColor: ELCO_RED}}>
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                          </svg>
-                        </div>
-                      )}
-                    </button>
+            )}
+            
+            {/* 3. Format */}
+            {color && (
+              <div id="format-section" className="p-6 border-b border-gray-100">
+                <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
+                  Format & Grösse
+                </h3>
+                <select
+                  value={format || ''}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className={`w-full px-4 py-3 text-gray-700 border-2 rounded-xl focus:outline-none transition-all cursor-pointer ${
+                    format ? 'bg-green-50' : 'bg-gray-50 hover:bg-white'
+                  }`}
+                  style={{
+                    borderColor: format ? ELCO_RED : '#e5e7eb',
+                    fontWeight: 400
+                  }}
+                >
+                  <option value="">Wählen Sie ein Format...</option>
+                  {availableFormats.map(fmt => (
+                    <option key={fmt.value} value={fmt.value}>
+                      {fmt.label} — {fmt.sizeLabel}
+                    </option>
+                  ))}
+                </select>
+                {format && (
+                  <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-gray-900 text-white"
+                    style={{fontWeight: 700}}>
+                    {availableFormats.find(f => f.value === format)?.sizeLabel}
                   </div>
-                </div>
-              )}
-              
-              {/* 3. Format */}
-              {color && (
-                <div id="format-section" className="p-6 border-b border-gray-100">
-                  <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                    Format & Grösse
-                  </h3>
-                  <select
-                    value={format || ''}
-                    onChange={(e) => setFormat(e.target.value)}
-                    className={`w-full px-4 py-3 text-gray-700 border-2 rounded-xl focus:outline-none transition-all cursor-pointer ${
-                      format ? 'bg-green-50' : 'bg-gray-50 hover:bg-white'
+                )}
+              </div>
+            )}
+            
+            {/* 4. Druckart */}
+            {format && (
+              <div id="print-section" className="p-6 border-b border-gray-100">
+                <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
+                  Druckart
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    onClick={() => setPrint('1/0')}
+                    className={`relative px-6 py-4 rounded-xl transition-all border-2 ${
+                      print === '1/0' 
+                        ? 'bg-green-50 shadow-lg' 
+                        : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
                     }`}
-                    style={{
-                      borderColor: format ? ELCO_RED : '#e5e7eb',
-                      fontWeight: 400
-                    }}
+                    style={print === '1/0' ? {borderColor: ELCO_RED} : {}}
                   >
-                    <option value="">Wählen Sie ein Format...</option>
-                    {availableFormats.map(fmt => (
-                      <option key={fmt.value} value={fmt.value}>
-                        {fmt.label} — {fmt.sizeLabel}
-                      </option>
-                    ))}
-                  </select>
-                  {format && (
-                    <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs bg-gray-900 text-white"
-                      style={{fontWeight: 700}}>
-                      {availableFormats.find(f => f.value === format)?.sizeLabel}
+                    <div className="text-2xl mb-1" style={{fontWeight: 700}}>1/0</div>
+                    <div className="text-xs text-gray-600" style={{fontWeight: 400}}>
+                      Einseitig bedruckt
                     </div>
-                  )}
-                </div>
-              )}
-              
-              {/* 4. Druckart */}
-              {format && (
-                <div id="print-section" className="p-6 border-b border-gray-100">
-                  <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                    Druckart
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => setPrint('1/0')}
-                      className={`relative px-6 py-4 rounded-xl transition-all border-2 ${
-                        print === '1/0' 
-                          ? 'bg-green-50 shadow-lg' 
-                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
-                      }`}
-                      style={print === '1/0' ? {borderColor: ELCO_RED} : {}}
-                    >
-                      <div className="text-2xl mb-1" style={{fontWeight: 700}}>1/0</div>
-                      <div className="text-xs text-gray-600" style={{fontWeight: 400}}>
-                        Einseitig bedruckt
-                      </div>
-                      {print === '1/0' && (
-                        <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
-                          style={{backgroundColor: ELCO_RED}}>
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                          </svg>
-                        </div>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => setPrint('1/1')}
-                      className={`relative px-6 py-4 rounded-xl transition-all border-2 ${
-                        print === '1/1' 
-                          ? 'bg-green-50 shadow-lg' 
-                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
-                      }`}
-                      style={print === '1/1' ? {borderColor: ELCO_RED} : {}}
-                    >
-                      <div className="text-2xl mb-1" style={{fontWeight: 700}}>1/1</div>
-                      <div className="text-xs text-gray-600" style={{fontWeight: 400}}>
-                        Beidseitig bedruckt
-                      </div>
-                      {print === '1/1' && (
-                        <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
-                          style={{backgroundColor: ELCO_RED}}>
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                          </svg>
-                        </div>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {/* 5. Menge */}
-              {print && (
-                <div id="qty-section" className="p-6">
-                  <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                    Menge
-                  </h3>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {[50, 100, 200, 500, 1000, 2000].map(tier => (
-                      <button
-                        key={tier}
-                        onClick={() => handleQuickSelection(tier)}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                          parseInt(qty) === tier 
-                            ? 'bg-gray-900 text-white shadow' 
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                        style={{fontWeight: 700}}
-                      >
-                        {tier.toLocaleString('de-CH')}
-                      </button>
-                    ))}
-                  </div>
-                  <input
-                    type="number"
-                    min="50"
-                    step="10"
-                    value={qty}
-                    onChange={(e) => setQty(e.target.value)}
-                    onWheel={(e) => e.target.blur()}
-                    placeholder="Eigene Menge eingeben..."
-                    className={`w-full px-4 py-3 text-lg border-2 rounded-xl transition-all ${
-                      qtyError 
-                        ? 'border-red-400 bg-red-50' 
-                        : qty && !qtyError
-                        ? 'bg-green-50'
-                        : 'bg-gray-50 focus:bg-white'
-                    } focus:outline-none`}
-                    style={{
-                      borderColor: qty && !qtyError ? ELCO_RED : qtyError ? '#f87171' : '#e5e7eb',
-                      fontWeight: 700
-                    }}
-                  />
-                  {qtyError && (
-                    <p className="mt-2 text-sm text-red-600 flex items-center" style={{fontWeight: 400}}>
-                      ⚠️ {qtyError}
-                    </p>
-                  )}
-                  {parseInt(qty) > 2000 && !qtyError && (
-                    <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
-                      <div className="flex items-start">
-                        <span className="text-blue-600 mr-2 text-lg">📞</span>
-                        <div>
-                          <p className="text-sm text-blue-900 mb-2" style={{fontWeight: 700}}>
-                            Grossauflage erkannt
-                          </p>
-                          <p className="text-sm text-blue-800 mb-3" style={{fontWeight: 400}}>
-                            Für Auflagen über 2'000 Stück bieten wir Ihnen individuelle Preise und erweiterte Optionen wie:
-                          </p>
-                          <ul className="text-sm text-blue-800 mb-3 ml-4" style={{fontWeight: 400}}>
-                            <li>• Mehrfarbiger Druck (bis 6 Farben)</li>
-                            <li>• Rundum-Druck (5 Seiten)</li>
-                            <li>• Sonderformate</li>
-                            <li>• Premium-Veredelungen</li>
-                          </ul>
-                          <p className="text-sm text-blue-900" style={{fontWeight: 700}}>
-                            Kontaktieren Sie unseren Innendienst:
-                          </p>
-                          <p className="text-sm text-blue-800 mt-1" style={{fontWeight: 400}}>
-                            <a href="mailto:business@elcoworld.ch" className="underline hover:text-blue-900">
-                              business@elcoworld.ch
-                            </a><br/>
-                            <a href="tel:+41564628000" className="underline hover:text-blue-900">
-                              +41 56 462 80 00
-                            </a>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        
-        {/* Price, Shipping and Contact Section - Below Configuration */}
-        {priceResult && !priceResult.error && (
-          <div className="max-w-2xl mx-auto space-y-6 mt-8">
-            {/* Price Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-lg text-gray-900 mb-6" style={{fontWeight: 700}}>Preiskalkulation</h2>
-                
-                  <>
-                    {/* Configuration Summary */}
-                    <div className="space-y-3 pb-6 border-b border-gray-100">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500" style={{fontWeight: 400}}>Konfiguration</span>
-                        <span className="text-gray-900" style={{fontWeight: 700}}>
-                          {handle === 'flachhenkel' ? 'Flach' : 'Kordel'} • {color === 'braun' ? 'Braun' : 'Weiss'} • {print}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500" style={{fontWeight: 400}}>Format</span>
-                        <span className="text-gray-900" style={{fontWeight: 700}}>{format?.replace(/x/g, '×')} cm</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500" style={{fontWeight: 400}}>Menge</span>
-                        <span className="text-gray-900" style={{fontWeight: 700}}>{qty} Stück</span>
-                      </div>
-                    </div>
-                    
-                    {/* Price Details */}
-                    <div className="py-6 space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500" style={{fontWeight: 400}}>Stückpreis</span>
-                        <span className="text-gray-900" style={{fontWeight: 400}}>{formatPriceCHF(priceResult.unit)}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500" style={{fontWeight: 400}}>Warenwert</span>
-                        <span className="text-gray-900" style={{fontWeight: 700}}>{formatPriceCHF(priceResult.subtotal)}</span>
-                      </div>
-                      
-                      {priceResult.shipping > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500" style={{fontWeight: 400}}>Versand</span>
-                          <span className="text-gray-700" style={{fontWeight: 400}}>+ {formatPriceCHF(priceResult.shipping)}</span>
-                        </div>
-                      )}
-                      
-                      {priceResult.smallQtySurcharge > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500" style={{fontWeight: 400}}>Kleinmengenzuschlag</span>
-                          <span className="text-orange-600" style={{fontWeight: 400}}>+ {formatPriceCHF(priceResult.smallQtySurcharge)}</span>
-                        </div>
-                      )}
-                      
-                      {priceResult.shipping === 0 && (
-                        <div className="flex items-center text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg">
-                          <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                          </svg>
-                          <span style={{fontWeight: 700}}>Versandkostenfrei</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Total - Schwarz und Fett */}
-                    <div className="pt-6 border-t border-gray-100">
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-gray-900" style={{fontWeight: 700}}>Gesamtpreis</span>
-                        <div className="text-right">
-                          <div className="text-3xl text-gray-900" style={{fontWeight: 700}}>
-                            {formatPriceCHF(priceResult.total)}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1" style={{fontWeight: 400}}>exkl. MwSt</div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Savings Tip */}
-                    {priceResult.nextTier && (
-                      <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                        <div className="flex items-start">
-                          <span className="text-blue-500 mr-2">💡</span>
-                          <div className="text-xs text-blue-700" style={{fontWeight: 400}}>
-                            <span style={{fontWeight: 700}}>Spartipp:</span> Bei {priceResult.nextTier.tier} Stück sparen Sie {priceResult.nextTier.savingsPercent}% pro Stück
-                          </div>
-                        </div>
+                    {print === '1/0' && (
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                        style={{backgroundColor: ELCO_RED}}>
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                        </svg>
                       </div>
                     )}
-                    
-                    {/* CTA Button mit Elco-Rot */}
-                    <button
-                      onClick={() => document.getElementById('contact-form').scrollIntoView({ behavior: 'smooth' })}
-                      className="w-full mt-6 py-4 text-white rounded-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
-                      style={{backgroundColor: ELCO_RED, fontWeight: 700}}
-                    >
-                      Anfrage starten →
-                    </button>
-                  </>
-              </div>
-            </div>
-            
-            {/* Shipping Info Card */}
-            <div className="bg-gray-50 rounded-2xl p-6">
-                <h3 className="text-sm text-gray-900 mb-4" style={{fontWeight: 700}}>Versand & Lieferung</h3>
-                <div className="space-y-4 text-sm">
-                  <div>
-                    <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Versandkosten</div>
-                    <div className="text-gray-900" style={{fontWeight: 400}}>
-                      • Gratis ab CHF 250.-<br/>
-                      • CHF 12.90 (CHF 100-250)<br/>
-                      • CHF 25.- (unter CHF 100)
+                  </button>
+                  <button
+                    onClick={() => setPrint('1/1')}
+                    className={`relative px-6 py-4 rounded-xl transition-all border-2 ${
+                      print === '1/1' 
+                        ? 'bg-green-50 shadow-lg' 
+                        : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
+                    }`}
+                    style={print === '1/1' ? {borderColor: ELCO_RED} : {}}
+                  >
+                    <div className="text-2xl mb-1" style={{fontWeight: 700}}>1/1</div>
+                    <div className="text-xs text-gray-600" style={{fontWeight: 400}}>
+                      Beidseitig bedruckt
                     </div>
-                  </div>
-                  <div>
-                    <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Lieferzeit</div>
-                    <div className="text-gray-900" style={{fontWeight: 400}}>
-                      5-7 Arbeitstage<br/>
-                      Express auf Anfrage
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Proof</div>
-                    <div className="text-gray-900" style={{fontWeight: 400}}>Innert 24 Stunden</div>
-                  </div>
+                    {print === '1/1' && (
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                        style={{backgroundColor: ELCO_RED}}>
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                    )}
+                  </button>
                 </div>
               </div>
             )}
             
-            {/* Contact Form */}
-            <div id="contact-form" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg text-gray-900 mb-6" style={{fontWeight: 700}}>Kontaktdaten</h3>
-                <div className="space-y-4">
-                  <input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                    placeholder="Firma *"
-                    style={{fontWeight: 400}}
-                    required
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                      placeholder="Vorname *"
-                      style={{fontWeight: 400}}
-                      required
-                    />
-                    <input
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                      placeholder="Nachname *"
-                      style={{fontWeight: 400}}
-                      required
-                    />
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                    placeholder="E-Mail *"
-                    style={{fontWeight: 400}}
-                    required
-                  />
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                    placeholder="Telefon *"
-                    style={{fontWeight: 400}}
-                    required
-                  />
-                  <button
-                    onClick={handleMailto}
-                    className="w-full py-4 text-white rounded-xl transition-all shadow-lg hover:shadow-xl"
-                    style={{backgroundColor: ELCO_RED, fontWeight: 700}}
-                  >
-                    📧 E-Mail-Anfrage öffnen
-                  </button>
-                  <p className="text-xs text-gray-500 text-center" style={{fontWeight: 400}}>
-                    Hängen Sie bitte Ihr Logo an die E-Mail an
+            {/* 5. Menge */}
+            {print && (
+              <div id="qty-section" className="p-6">
+                <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
+                  Menge
+                </h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {[50, 100, 200, 500, 1000, 2000].map(tier => (
+                    <button
+                      key={tier}
+                      onClick={() => handleQuickSelection(tier)}
+                      className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                        parseInt(qty) === tier 
+                          ? 'bg-gray-900 text-white shadow' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                      style={{fontWeight: 700}}
+                    >
+                      {tier.toLocaleString('de-CH')}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="number"
+                  min="50"
+                  step="10"
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                  onWheel={(e) => e.target.blur()}
+                  placeholder="Eigene Menge eingeben..."
+                  className={`w-full px-4 py-3 text-lg border-2 rounded-xl transition-all ${
+                    qtyError 
+                      ? 'border-red-400 bg-red-50' 
+                      : qty && !qtyError
+                      ? 'bg-green-50'
+                      : 'bg-gray-50 focus:bg-white'
+                  } focus:outline-none`}
+                  style={{
+                    borderColor: qty && !qtyError ? ELCO_RED : qtyError ? '#f87171' : '#e5e7eb',
+                    fontWeight: 700
+                  }}
+                />
+                {qtyError && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center" style={{fontWeight: 400}}>
+                    ⚠️ {qtyError}
                   </p>
+                )}
+                {parseInt(qty) > 2000 && !qtyError && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <div className="flex items-start">
+                      <span className="text-blue-600 mr-2 text-lg">📞</span>
+                      <div>
+                        <p className="text-sm text-blue-900 mb-2" style={{fontWeight: 700}}>
+                          Grossauflage erkannt
+                        </p>
+                        <p className="text-sm text-blue-800 mb-3" style={{fontWeight: 400}}>
+                          Für Auflagen über 2'000 Stück bieten wir Ihnen individuelle Preise und erweiterte Optionen wie:
+                        </p>
+                        <ul className="text-sm text-blue-800 mb-3 ml-4" style={{fontWeight: 400}}>
+                          <li>• Mehrfarbiger Druck (bis 6 Farben)</li>
+                          <li>• Rundum-Druck (5 Seiten)</li>
+                          <li>• Sonderformate</li>
+                          <li>• Premium-Veredelungen</li>
+                        </ul>
+                        <p className="text-sm text-blue-900" style={{fontWeight: 700}}>
+                          Kontaktieren Sie unseren Innendienst:
+                        </p>
+                        <p className="text-sm text-blue-800 mt-1" style={{fontWeight: 400}}>
+                          <a href="mailto:business@elcoworld.ch" className="underline hover:text-blue-900">
+                            business@elcoworld.ch
+                          </a><br/>
+                          <a href="tel:+41564628000" className="underline hover:text-blue-900">
+                            +41 56 462 80 00
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Price and Contact Section - Shows when configuration is complete */}
+        {priceResult && !priceResult.error && (
+          <div className="space-y-6">
+            {/* Price Card - Attractive Design */}
+            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl text-gray-900" style={{fontWeight: 700}}>
+                    Ihre Preiskalkulation
+                  </h2>
+                  <span className="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-full" style={{fontWeight: 700}}>
+                    Tagesaktuelle Preise
+                  </span>
+                </div>
+                
+                {/* Configuration Summary - Clean Design */}
+                <div className="space-y-3 pb-6 border-b border-gray-100 bg-gray-50 rounded-lg p-4">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600" style={{fontWeight: 400}}>
+                      Konfiguration
+                    </span>
+                    <span className="text-gray-900" style={{fontWeight: 700}}>
+                      {handle === 'flachhenkel' ? 'Flach' : 'Kordel'} • {color === 'braun' ? 'Braun' : 'Weiss'} • {print}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600" style={{fontWeight: 400}}>
+                      Format
+                    </span>
+                    <span className="text-gray-900" style={{fontWeight: 700}}>{format?.replace(/x/g, '×')} cm</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600" style={{fontWeight: 400}}>
+                      Menge
+                    </span>
+                    <span className="text-gray-900" style={{fontWeight: 700}}>{qty} Stück</span>
+                  </div>
+                </div>
+                
+                {/* Price Details */}
+                <div className="py-6 space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500" style={{fontWeight: 400}}>Stückpreis</span>
+                    <span className="text-gray-900" style={{fontWeight: 400}}>{formatPriceCHF(priceResult.unit)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500" style={{fontWeight: 400}}>Warenwert</span>
+                    <span className="text-gray-900" style={{fontWeight: 700}}>{formatPriceCHF(priceResult.subtotal)}</span>
+                  </div>
+                  
+                  {priceResult.shipping > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500" style={{fontWeight: 400}}>Versand</span>
+                      <span className="text-gray-700" style={{fontWeight: 400}}>+ {formatPriceCHF(priceResult.shipping)}</span>
+                    </div>
+                  )}
+                  
+                  {priceResult.smallQtySurcharge > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500" style={{fontWeight: 400}}>Kleinmengenzuschlag</span>
+                      <span className="text-orange-600" style={{fontWeight: 400}}>+ {formatPriceCHF(priceResult.smallQtySurcharge)}</span>
+                    </div>
+                  )}
+                  
+                  {priceResult.shipping === 0 && (
+                    <div className="flex items-center text-sm text-green-600 bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2 rounded-lg border border-green-200">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                      </svg>
+                      <span style={{fontWeight: 700}}>Versandkostenfrei!</span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Total - Attractive Design */}
+                <div className="pt-6 border-t-2 border-gray-100">
+                  <div className="bg-gradient-to-r from-gray-50 to-green-50 rounded-xl p-4">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-700" style={{fontWeight: 700}}>
+                        Ihr Gesamtpreis
+                      </span>
+                      <div className="text-right">
+                        <div className="text-3xl text-gray-900" style={{fontWeight: 700}}>
+                          {formatPriceCHF(priceResult.total)}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1" style={{fontWeight: 400}}>exkl. MwSt</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Savings Tip */}
+                {priceResult.nextTier && (
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <div className="flex items-start">
+                      <span className="text-blue-500 mr-2">💡</span>
+                      <div className="text-xs text-blue-700" style={{fontWeight: 400}}>
+                        <span style={{fontWeight: 700}}>Spartipp:</span> Bei {priceResult.nextTier.tier} Stück sparen Sie {priceResult.nextTier.savingsPercent}% pro Stück
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Shipping Info Card - Compact & Attractive */}
+            <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl p-6 border border-blue-100">
+              <h3 className="text-sm text-gray-900 mb-3" style={{fontWeight: 700}}>
+                Versand & Lieferung
+              </h3>
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                  <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Versandkosten</div>
+                  <div className="text-gray-900" style={{fontWeight: 400}}>
+                    <strong>Gratis</strong> ab CHF 250.-<br/>
+                    <strong>CHF 12.90</strong> ab CHF 100.-<br/>
+                    <strong>CHF 25.-</strong> unter CHF 100.-
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Lieferzeit</div>
+                  <div className="text-gray-900" style={{fontWeight: 400}}>
+                    5-7 Arbeitstage<br/>
+                    Express möglich
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Proof</div>
+                  <div className="text-gray-900" style={{fontWeight: 400}}>
+                    Innert 24h<br/>
+                    digital
+                  </div>
                 </div>
               </div>
+            </div>
+            {/* Contact Form */}
+            <div id="contact-form" className="bg-white rounded-2xl shadow-lg border-2 p-6" style={{borderColor: ELCO_RED}}>
+              <h3 className="text-xl text-gray-900 mb-6" style={{fontWeight: 700}}>Jetzt direkt anfragen</h3>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                  placeholder="Firma *"
+                  style={{fontWeight: 400}}
+                  required
+                />
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                    placeholder="Vorname *"
+                    style={{fontWeight: 400}}
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                    placeholder="Nachname *"
+                    style={{fontWeight: 400}}
+                    required
+                  />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                  placeholder="E-Mail *"
+                  style={{fontWeight: 400}}
+                  required
+                />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                  placeholder="Telefon *"
+                  style={{fontWeight: 400}}
+                  required
+                />
+                <button
+                  onClick={handleMailto}
+                  className="w-full py-4 text-white rounded-xl transition-all shadow-lg hover:shadow-xl"
+                  style={{backgroundColor: ELCO_RED, fontWeight: 700}}
+                >
+                  📧 E-Mail-Anfrage öffnen
+                </button>
+                <p className="text-xs text-gray-500 text-center" style={{fontWeight: 400}}>
+                  Hängen Sie bitte Ihr Logo an die E-Mail an
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>
