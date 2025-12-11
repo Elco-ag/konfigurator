@@ -348,7 +348,7 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error) {
       setTimeout(() => {
-        window.scrollBy({ top: 300, behavior: 'smooth' });
+        window.scrollBy({ top: 500, behavior: 'smooth' });
       }, 300);
     }
   }, [priceResult]);
@@ -424,7 +424,7 @@ ${firstName} ${lastName}`);
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" 
       style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl">
         
         {/* Configuration Section */}
         <div className="mb-12">
