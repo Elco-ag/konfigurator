@@ -343,6 +343,15 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [print]);
   
+  // Scroll to price when quantity is entered
+  useEffect(() => {
+    if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error) {
+      setTimeout(() => {
+        window.scrollBy({ top: 400, behavior: 'smooth' });
+      }, 300);
+    }
+  }, [qty, priceResult]);
+  
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
       alert('Bitte alle Pflichtfelder ausfüllen');
@@ -413,10 +422,10 @@ ${firstName} ${lastName}`);
   
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" style={{minHeight: '100vh', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        {/* Main Configuration */}
+        <div className="mb-8">
             {/* Progress Indicator - Schwarz */}
             <div className="mb-8">
               <div className="flex items-center justify-between relative">
@@ -740,17 +749,16 @@ ${firstName} ${lastName}`);
               )}
             </div>
           </div>
-          
-          {/* Sidebar */}
-          {/* Right Sidebar - scrolls naturally with content */}
-          <div className="lg:col-span-1">
-            <div className="space-y-6">
-              {/* Price Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        </div>
+        
+        {/* Price, Shipping and Contact Section - Below Configuration */}
+        {priceResult && !priceResult.error && (
+          <div className="max-w-2xl mx-auto space-y-6 mt-8">
+            {/* Price Card */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6">
                 <h2 className="text-lg text-gray-900 mb-6" style={{fontWeight: 700}}>Preiskalkulation</h2>
                 
-                {priceResult && !priceResult.error ? (
                   <>
                     {/* Configuration Summary */}
                     <div className="space-y-3 pb-6 border-b border-gray-100">
@@ -839,22 +847,11 @@ ${firstName} ${lastName}`);
                       Anfrage starten →
                     </button>
                   </>
-                ) : (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-2xl opacity-50">🛍️</span>
-                    </div>
-                    <p className="text-sm text-gray-500" style={{fontWeight: 400}}>
-                      Konfigurieren Sie Ihre Taschen<br/>für eine Preiskalkulation
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
             
             {/* Shipping Info Card */}
-            {priceResult && !priceResult.error && (
-              <div className="bg-gray-50 rounded-2xl p-6">
+            <div className="bg-gray-50 rounded-2xl p-6">
                 <h3 className="text-sm text-gray-900 mb-4" style={{fontWeight: 700}}>Versand & Lieferung</h3>
                 <div className="space-y-4 text-sm">
                   <div>
@@ -881,8 +878,7 @@ ${firstName} ${lastName}`);
             )}
             
             {/* Contact Form */}
-            {priceResult && !priceResult.error && (
-              <div id="contact-form" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div id="contact-form" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h3 className="text-lg text-gray-900 mb-6" style={{fontWeight: 700}}>Kontaktdaten</h3>
                 <div className="space-y-4">
                   <input
@@ -944,9 +940,8 @@ ${firstName} ${lastName}`);
                   </p>
                 </div>
               </div>
-            )}
           </div>
-        </div>
+        )}
       </div>
       
       {/* Toast Notification */}
