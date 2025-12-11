@@ -264,6 +264,7 @@ export default function PapiertragetaschenKalkulator() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
   
   const priceResult = handle && color && format && print && qty && parseInt(qty) >= 50
     ? calcPrice({ handle, color, format, print, qty: parseInt(qty) }, PRICE_DATA)
@@ -309,48 +310,6 @@ export default function PapiertragetaschenKalkulator() {
       setQtyError('');
     }
   }, [qty]);
-  
-  // Auto-scroll - 250px per step
-  useEffect(() => {
-    if (handle && !color) {
-      setTimeout(() => {
-        window.scrollBy({ top: 250, behavior: 'smooth' });
-      }, 200);
-    }
-  }, [handle]);
-  
-  useEffect(() => {
-    if (color && !format) {
-      setTimeout(() => {
-        window.scrollBy({ top: 250, behavior: 'smooth' });
-      }, 200);
-    }
-  }, [color]);
-  
-  useEffect(() => {
-    if (format && !print) {
-      setTimeout(() => {
-        window.scrollBy({ top: 250, behavior: 'smooth' });
-      }, 200);
-    }
-  }, [format]);
-  
-  useEffect(() => {
-    if (print) {
-      setTimeout(() => {
-        window.scrollBy({ top: 250, behavior: 'smooth' });
-      }, 200);
-    }
-  }, [print]);
-  
-  // Scroll to price section when quantity is entered - bigger scroll
-  useEffect(() => {
-    if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error) {
-      setTimeout(() => {
-        window.scrollBy({ top: 700, behavior: 'smooth' });
-      }, 300);
-    }
-  }, [qty, priceResult]);
   
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
@@ -422,7 +381,7 @@ ${firstName} ${lastName}`);
   
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" 
-      style={{minHeight: '100vh', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
+      style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
       <div className="max-w-4xl mx-auto">
         
         {/* Configuration Section */}
@@ -853,10 +812,93 @@ ${firstName} ${lastName}`);
                     </div>
                   </div>
                 )}
+                
+                {/* CTA Button */}
+                <button
+                  onClick={() => {
+                    setShowContactForm(true);
+                    setTimeout(() => {
+                      const element = document.getElementById('contact-form');
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 150);
+                  }}
+                  className="w-full mt-6 py-4 text-white rounded-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                  style={{backgroundColor: ELCO_RED, fontWeight: 700, fontSize: '16px'}}
+                >
+                  Jetzt Anfrage starten →
+                </button>
               </div>
             </div>
             
-            {/* Shipping Info Card - Compact & Attractive */}
+            {/* Contact Form - nur zeigen wenn Button geklickt wurde */}
+            {showContactForm && (
+              <div id="contact-form" className="bg-white rounded-2xl shadow-lg border-2 p-6" style={{borderColor: ELCO_RED}}>
+                <h3 className="text-xl text-gray-900 mb-6" style={{fontWeight: 700}}>Jetzt direkt anfragen</h3>
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                    placeholder="Firma *"
+                    style={{fontWeight: 400}}
+                    required
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                      placeholder="Vorname *"
+                      style={{fontWeight: 400}}
+                      required
+                    />
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                      placeholder="Nachname *"
+                      style={{fontWeight: 400}}
+                      required
+                    />
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                    placeholder="E-Mail *"
+                    style={{fontWeight: 400}}
+                    required
+                  />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
+                    placeholder="Telefon *"
+                    style={{fontWeight: 400}}
+                    required
+                  />
+                  <button
+                    onClick={handleMailto}
+                    className="w-full py-4 text-white rounded-xl transition-all shadow-lg hover:shadow-xl"
+                    style={{backgroundColor: ELCO_RED, fontWeight: 700}}
+                  >
+                    📧 E-Mail-Anfrage öffnen
+                  </button>
+                  <p className="text-xs text-gray-500 text-center" style={{fontWeight: 400}}>
+                    Hängen Sie bitte Ihr Logo an die E-Mail an
+                  </p>
+                </div>
+              </div>
+            )}
+            
+            {/* Shipping Info Card - Ganz unten */}
             <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-2xl p-6 border border-blue-100">
               <h3 className="text-sm text-gray-900 mb-3" style={{fontWeight: 700}}>
                 Versand & Lieferung
@@ -884,69 +926,6 @@ ${firstName} ${lastName}`);
                     digital
                   </div>
                 </div>
-              </div>
-            </div>
-            {/* Contact Form */}
-            <div id="contact-form" className="bg-white rounded-2xl shadow-lg border-2 p-6" style={{borderColor: ELCO_RED}}>
-              <h3 className="text-xl text-gray-900 mb-6" style={{fontWeight: 700}}>Jetzt direkt anfragen</h3>
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                  placeholder="Firma *"
-                  style={{fontWeight: 400}}
-                  required
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                    placeholder="Vorname *"
-                    style={{fontWeight: 400}}
-                    required
-                  />
-                  <input
-                    type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                    placeholder="Nachname *"
-                    style={{fontWeight: 400}}
-                    required
-                  />
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                  placeholder="E-Mail *"
-                  style={{fontWeight: 400}}
-                  required
-                />
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
-                  placeholder="Telefon *"
-                  style={{fontWeight: 400}}
-                  required
-                />
-                <button
-                  onClick={handleMailto}
-                  className="w-full py-4 text-white rounded-xl transition-all shadow-lg hover:shadow-xl"
-                  style={{backgroundColor: ELCO_RED, fontWeight: 700}}
-                >
-                  📧 E-Mail-Anfrage öffnen
-                </button>
-                <p className="text-xs text-gray-500 text-center" style={{fontWeight: 400}}>
-                  Hängen Sie bitte Ihr Logo an die E-Mail an
-                </p>
               </div>
             </div>
           </div>
