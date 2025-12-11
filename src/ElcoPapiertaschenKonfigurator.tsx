@@ -310,11 +310,18 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
-  // Auto-Scroll when sections expand
+  // Auto-Scroll only when needed to show new sections
   useEffect(() => {
     if (handle && !color) {
       setTimeout(() => {
-        document.getElementById('color-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const element = document.getElementById('color-section');
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Only scroll if element is below viewport
+          if (rect.bottom > window.innerHeight) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }
+        }
       }, 100);
     }
   }, [handle, color]);
@@ -322,7 +329,13 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (color && !format) {
       setTimeout(() => {
-        document.getElementById('format-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const element = document.getElementById('format-section');
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.bottom > window.innerHeight) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }
+        }
       }, 100);
     }
   }, [color, format]);
@@ -330,7 +343,13 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (format && !print) {
       setTimeout(() => {
-        document.getElementById('print-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const element = document.getElementById('print-section');
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.bottom > window.innerHeight) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }
+        }
       }, 100);
     }
   }, [format, print]);
@@ -338,7 +357,13 @@ export default function PapiertragetaschenKalkulator() {
   useEffect(() => {
     if (print && !qty) {
       setTimeout(() => {
-        document.getElementById('qty-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const element = document.getElementById('qty-section');
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.bottom > window.innerHeight) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }
+        }
       }, 100);
     }
   }, [print, qty]);
