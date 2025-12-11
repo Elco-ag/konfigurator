@@ -310,6 +310,39 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
+  // Auto-Scroll when sections expand
+  useEffect(() => {
+    if (handle && !color) {
+      setTimeout(() => {
+        document.getElementById('color-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [handle, color]);
+  
+  useEffect(() => {
+    if (color && !format) {
+      setTimeout(() => {
+        document.getElementById('format-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [color, format]);
+  
+  useEffect(() => {
+    if (format && !print) {
+      setTimeout(() => {
+        document.getElementById('print-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [format, print]);
+  
+  useEffect(() => {
+    if (print && !qty) {
+      setTimeout(() => {
+        document.getElementById('qty-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [print, qty]);
+  
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
       alert('Bitte alle Pflichtfelder ausfüllen');
@@ -382,15 +415,6 @@ ${firstName} ${lastName}`);
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8" 
       style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
       <div className="max-w-7xl mx-auto">
-        {/* Clean Header - Alles in Schwarz */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl text-gray-900 mb-2">
-            <span style={{fontWeight: 300}}>Papiertragetaschen</span> <span style={{fontWeight: 700}}>Kalkulator</span>
-          </h1>
-          <p className="text-gray-500" style={{fontWeight: 400}}>
-            Individueller Preis für Ihre Taschen mit Logo
-          </p>
-        </div>
         
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -491,7 +515,7 @@ ${firstName} ${lastName}`);
               
               {/* 2. Farbe */}
               {handle && (
-                <div className="p-6 border-b border-gray-100">
+                <div id="color-section" className="p-6 border-b border-gray-100">
                   <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                     Farbe
                   </h3>
@@ -548,7 +572,7 @@ ${firstName} ${lastName}`);
               
               {/* 3. Format */}
               {color && (
-                <div className="p-6 border-b border-gray-100">
+                <div id="format-section" className="p-6 border-b border-gray-100">
                   <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                     Format & Grösse
                   </h3>
@@ -581,7 +605,7 @@ ${firstName} ${lastName}`);
               
               {/* 4. Druckart */}
               {format && (
-                <div className="p-6 border-b border-gray-100">
+                <div id="print-section" className="p-6 border-b border-gray-100">
                   <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                     Druckart
                   </h3>
@@ -636,7 +660,7 @@ ${firstName} ${lastName}`);
               
               {/* 5. Menge */}
               {print && (
-                <div className="p-6">
+                <div id="qty-section" className="p-6">
                   <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                     Menge
                   </h3>
