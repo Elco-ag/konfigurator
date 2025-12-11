@@ -311,6 +311,48 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
+  // Auto-scroll bei jedem Konfigurationsschritt
+  useEffect(() => {
+    if (handle && !color) {
+      setTimeout(() => {
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 200);
+    }
+  }, [handle]);
+  
+  useEffect(() => {
+    if (color && !format) {
+      setTimeout(() => {
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 200);
+    }
+  }, [color]);
+  
+  useEffect(() => {
+    if (format && !print) {
+      setTimeout(() => {
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 200);
+    }
+  }, [format]);
+  
+  useEffect(() => {
+    if (print && !qty) {
+      setTimeout(() => {
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+      }, 200);
+    }
+  }, [print]);
+  
+  // Scroll zum Preis wenn Menge eingegeben wird
+  useEffect(() => {
+    if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error) {
+      setTimeout(() => {
+        window.scrollBy({ top: 300, behavior: 'smooth' });
+      }, 300);
+    }
+  }, [priceResult]);
+  
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
       alert('Bitte alle Pflichtfelder ausfüllen');
@@ -818,10 +860,7 @@ ${firstName} ${lastName}`);
                   onClick={() => {
                     setShowContactForm(true);
                     setTimeout(() => {
-                      const element = document.getElementById('contact-form');
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }
+                      window.scrollBy({ top: 200, behavior: 'smooth' });
                     }, 150);
                   }}
                   className="w-full mt-6 py-4 text-white rounded-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
