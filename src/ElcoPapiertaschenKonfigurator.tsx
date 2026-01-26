@@ -428,7 +428,7 @@ export default function PapiertragetaschenKalkulator() {
     }
     
     const subject = encodeURIComponent('Anfrage Papiertragetasche mit Logo via Konfigurator');
-    const body = encodeURIComponent(`Guten Tag liebes ELCO Team
+    const body = encodeURIComponent(`Guten Tag ELCO Team
 
 Ich interessiere mich für bedruckte Papiertragetaschen mit meinem Logo und bitte um ein Angebot mit Proof.
 
