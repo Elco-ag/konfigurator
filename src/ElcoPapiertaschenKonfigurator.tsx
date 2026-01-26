@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // ============================================================================
 // PREISDATEN - Aktualisiert mit Artikelnummern & logischer Sortierung
@@ -247,7 +247,23 @@ function formatPriceCHF(price, decimals = 2) {
 const ELCO_RED = '#e63027';
 
 // ============================================================================
-// MAIN COMPONENT - Linear Flow Design
+// SMOOTH SCROLL HELPER
+// ============================================================================
+function smoothScrollToElement(elementId, offset = -20) {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  
+  const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+  const offsetPosition = elementPosition + offset;
+  
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth'
+  });
+}
+
+// ============================================================================
+// MAIN COMPONENT - Linear Flow Design (OPTIMIERT)
 // ============================================================================
 
 export default function PapiertragetaschenKalkulator() {
@@ -265,6 +281,19 @@ export default function PapiertragetaschenKalkulator() {
   const [phone, setPhone] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
+  
+  // Refs für smooth scrolling
+  const colorRef = useRef(null);
+  const formatRef = useRef(null);
+  const printRef = useRef(null);
+  const qtyRef = useRef(null);
+  const priceRef = useRef(null);
+  
+  // Scroll-Timeout ref für debouncing
+  const scrollTimeoutRef = useRef(null);
+  
+  // Flag um Auto-Scroll zu deaktivieren wenn User im Kontaktformular ist
+  const isUserInteracting = useRef(false);
   
   const priceResult = handle && color && format && print && qty && parseInt(qty) >= 50
     ? calcPrice({ handle, color, format, print, qty: parseInt(qty) }, PRICE_DATA)
@@ -284,6 +313,7 @@ export default function PapiertragetaschenKalkulator() {
         })
     : [];
   
+  // Reset logic
   useEffect(() => {
     setColor(null);
     setFormat(null);
@@ -302,6 +332,7 @@ export default function PapiertragetaschenKalkulator() {
     setQty('');
   }, [format]);
   
+  // Quantity validation
   useEffect(() => {
     const num = parseInt(qty);
     if (qty && (isNaN(num) || num < 50)) {
@@ -311,47 +342,66 @@ export default function PapiertragetaschenKalkulator() {
     }
   }, [qty]);
   
-  // Auto-scroll bei jedem Konfigurationsschritt
+  // OPTIMIERTES AUTO-SCROLL mit debouncing
+  const smoothScrollTo = (ref, delay = 400) => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (ref?.current) {
+        const element = ref.current;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - 100;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, delay);
+  };
+  
+  // Auto-scroll zu nächster Section
   useEffect(() => {
-    if (handle && !color) {
-      setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 200);
+    if (handle && colorRef.current) {
+      smoothScrollTo(colorRef, 300);
     }
   }, [handle]);
   
   useEffect(() => {
-    if (color && !format) {
-      setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 200);
+    if (color && formatRef.current) {
+      smoothScrollTo(formatRef, 300);
     }
   }, [color]);
   
   useEffect(() => {
-    if (format && !print) {
-      setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 200);
+    if (format && printRef.current) {
+      smoothScrollTo(printRef, 300);
     }
   }, [format]);
   
   useEffect(() => {
-    if (print && !qty) {
-      setTimeout(() => {
-        window.scrollBy({ top: 200, behavior: 'smooth' });
-      }, 200);
+    if (print && qtyRef.current) {
+      smoothScrollTo(qtyRef, 300);
     }
   }, [print]);
   
-  // Scroll zum Preis wenn Menge eingegeben wird
+  // Scroll zum Preis nur wenn komplette Konfiguration UND User nicht im Kontaktformular
   useEffect(() => {
-    if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error) {
-      setTimeout(() => {
-        window.scrollBy({ top: 500, behavior: 'smooth' });
-      }, 300);
+    if (qty && parseInt(qty) >= 50 && priceResult && !priceResult.error && priceRef.current && !showContactForm && !isUserInteracting.current) {
+      smoothScrollTo(priceRef, 500);
     }
-  }, [priceResult]);
+  }, [priceResult, showContactForm]);
+  
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
   
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
@@ -429,7 +479,7 @@ ${firstName} ${lastName}`);
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8 pb-20" 
       style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
-      <div className="max-w-4xl">
+      <div className="max-w-4xl mx-auto">
         
         {/* Configuration Section */}
         <div className="mb-12">
@@ -439,7 +489,7 @@ ${firstName} ${lastName}`);
               {/* Progress Line */}
               <div className="absolute left-0 top-5 w-full h-0.5 bg-gray-200"></div>
               <div 
-                className="absolute left-0 top-5 h-0.5 bg-gray-900 transition-all duration-700"
+                className="absolute left-0 top-5 h-0.5 bg-gray-900 transition-all duration-700 ease-out"
                 style={{
                   width: `${(handle ? 20 : 0) + (color ? 20 : 0) + (format ? 20 : 0) + (print ? 20 : 0) + (qty && !qtyError ? 20 : 0)}%`
                 }}
@@ -453,8 +503,8 @@ ${firstName} ${lastName}`);
                 { label: 'Druck', active: print },
                 { label: 'Menge', active: qty && !qtyError }
               ].map((step, idx) => (
-                <div key={idx} className="relative flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm transition-all ${
+                <div key={idx} className="relative flex flex-col items-center z-10">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${
                     step.active 
                       ? 'bg-gray-900 text-white shadow-lg scale-110' 
                       : 'bg-white border-2 border-gray-200 text-gray-400'
@@ -462,7 +512,7 @@ ${firstName} ${lastName}`);
                     style={{fontWeight: 700}}>
                     {idx + 1}
                   </div>
-                  <span className={`text-xs mt-2 ${step.active ? 'text-gray-900' : 'text-gray-400'}`}
+                  <span className={`text-xs mt-2 transition-colors duration-300 ${step.active ? 'text-gray-900' : 'text-gray-400'}`}
                     style={{fontWeight: step.active ? 700 : 400}}>
                     {step.label}
                   </span>
@@ -474,14 +524,14 @@ ${firstName} ${lastName}`);
           {/* Configuration Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* 1. Henkelform */}
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-6 border-b border-gray-100 scroll-mt-24">
               <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                 Henkelform
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => setHandle('flachhenkel')}
-                  className={`relative p-6 rounded-xl transition-all border-2 ${
+                  className={`relative p-6 rounded-xl transition-all duration-300 border-2 ${
                     handle === 'flachhenkel' 
                       ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
                       : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
@@ -504,7 +554,7 @@ ${firstName} ${lastName}`);
                 </button>
                 <button
                   onClick={() => setHandle('kordelhenkel')}
-                  className={`relative p-6 rounded-xl transition-all border-2 ${
+                  className={`relative p-6 rounded-xl transition-all duration-300 border-2 ${
                     handle === 'kordelhenkel' 
                       ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
                       : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
@@ -530,14 +580,14 @@ ${firstName} ${lastName}`);
             
             {/* 2. Farbe */}
             {handle && (
-              <div id="color-section" className="p-6 border-b border-gray-100">
+              <div ref={colorRef} className="p-6 border-b border-gray-100 scroll-mt-24">
                 <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                   Farbe
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <button
                     onClick={() => setColor('braun')}
-                    className={`relative p-6 rounded-xl transition-all border-2 ${
+                    className={`relative p-6 rounded-xl transition-all duration-300 border-2 ${
                       color === 'braun' 
                         ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
@@ -560,7 +610,7 @@ ${firstName} ${lastName}`);
                   </button>
                   <button
                     onClick={() => setColor('weiss')}
-                    className={`relative p-6 rounded-xl transition-all border-2 ${
+                    className={`relative p-6 rounded-xl transition-all duration-300 border-2 ${
                       color === 'weiss' 
                         ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
@@ -587,14 +637,14 @@ ${firstName} ${lastName}`);
             
             {/* 3. Format */}
             {color && (
-              <div id="format-section" className="p-6 border-b border-gray-100">
+              <div ref={formatRef} className="p-6 border-b border-gray-100 scroll-mt-24">
                 <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                   Format & Grösse
                 </h3>
                 <select
                   value={format || ''}
                   onChange={(e) => setFormat(e.target.value)}
-                  className={`w-full px-4 py-3 text-gray-700 border-2 rounded-xl focus:outline-none transition-all cursor-pointer ${
+                  className={`w-full px-4 py-3 text-gray-700 border-2 rounded-xl focus:outline-none transition-all duration-300 cursor-pointer ${
                     format ? 'bg-green-50' : 'bg-gray-50 hover:bg-white'
                   }`}
                   style={{
@@ -620,14 +670,14 @@ ${firstName} ${lastName}`);
             
             {/* 4. Druckart */}
             {format && (
-              <div id="print-section" className="p-6 border-b border-gray-100">
+              <div ref={printRef} className="p-6 border-b border-gray-100 scroll-mt-24">
                 <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                   Druckart
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <button
                     onClick={() => setPrint('1/0')}
-                    className={`relative px-6 py-4 rounded-xl transition-all border-2 ${
+                    className={`relative px-6 py-4 rounded-xl transition-all duration-300 border-2 ${
                       print === '1/0' 
                         ? 'bg-green-50 shadow-lg' 
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
@@ -649,7 +699,7 @@ ${firstName} ${lastName}`);
                   </button>
                   <button
                     onClick={() => setPrint('1/1')}
-                    className={`relative px-6 py-4 rounded-xl transition-all border-2 ${
+                    className={`relative px-6 py-4 rounded-xl transition-all duration-300 border-2 ${
                       print === '1/1' 
                         ? 'bg-green-50 shadow-lg' 
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
@@ -675,7 +725,7 @@ ${firstName} ${lastName}`);
             
             {/* 5. Menge */}
             {print && (
-              <div id="qty-section" className="p-6">
+              <div ref={qtyRef} className="p-6 scroll-mt-24">
                 <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                   Menge
                 </h3>
@@ -684,7 +734,7 @@ ${firstName} ${lastName}`);
                     <button
                       key={tier}
                       onClick={() => handleQuickSelection(tier)}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
                         parseInt(qty) === tier 
                           ? 'bg-gray-900 text-white shadow' 
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -703,7 +753,7 @@ ${firstName} ${lastName}`);
                   onChange={(e) => setQty(e.target.value)}
                   onWheel={(e) => e.target.blur()}
                   placeholder="Eigene Menge eingeben..."
-                  className={`w-full px-4 py-3 text-lg border-2 rounded-xl transition-all ${
+                  className={`w-full px-4 py-3 text-lg border-2 rounded-xl transition-all duration-300 ${
                     qtyError 
                       ? 'border-red-400 bg-red-50' 
                       : qty && !qtyError
@@ -759,7 +809,7 @@ ${firstName} ${lastName}`);
         
         {/* Price and Contact Section - Shows when configuration is complete */}
         {priceResult && !priceResult.error && (
-          <div className="space-y-6">
+          <div ref={priceRef} className="space-y-6 scroll-mt-24">
             {/* Price Card - Attractive Design */}
             <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
               <div className="p-6">
@@ -864,11 +914,19 @@ ${firstName} ${lastName}`);
                 <button
                   onClick={() => {
                     setShowContactForm(true);
+                    isUserInteracting.current = true; // Deaktiviere Auto-Scroll
                     setTimeout(() => {
-                      window.scrollBy({ top: 200, behavior: 'smooth' });
+                      const contactForm = document.getElementById('contact-form');
+                      if (contactForm) {
+                        const elementPosition = contactForm.getBoundingClientRect().top + window.pageYOffset;
+                        window.scrollTo({
+                          top: elementPosition - 100,
+                          behavior: 'smooth'
+                        });
+                      }
                     }, 150);
                   }}
-                  className="w-full mt-6 py-4 text-white rounded-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                  className="w-full mt-6 py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
                   style={{backgroundColor: ELCO_RED, fontWeight: 700, fontSize: '16px'}}
                 >
                   Jetzt Anfrage starten →
@@ -878,13 +936,14 @@ ${firstName} ${lastName}`);
             
             {/* Contact Form - nur zeigen wenn Button geklickt wurde */}
             {showContactForm && (
-              <div id="contact-form" className="bg-white rounded-2xl shadow-lg border-2 p-6" style={{borderColor: ELCO_RED}}>
+              <div id="contact-form" className="bg-white rounded-2xl shadow-lg border-2 p-6 scroll-mt-24" style={{borderColor: ELCO_RED}}>
                 <h3 className="text-xl text-gray-900 mb-6" style={{fontWeight: 700}}>Jetzt direkt anfragen</h3>
                 <div className="space-y-4">
                   <input
                     type="text"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
+                    onFocus={() => { isUserInteracting.current = true; }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
                     placeholder="Firma *"
                     style={{fontWeight: 400}}
@@ -895,6 +954,7 @@ ${firstName} ${lastName}`);
                       type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
+                      onFocus={() => { isUserInteracting.current = true; }}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
                       placeholder="Vorname *"
                       style={{fontWeight: 400}}
@@ -904,6 +964,7 @@ ${firstName} ${lastName}`);
                       type="text"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      onFocus={() => { isUserInteracting.current = true; }}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
                       placeholder="Nachname *"
                       style={{fontWeight: 400}}
@@ -914,6 +975,7 @@ ${firstName} ${lastName}`);
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => { isUserInteracting.current = true; }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
                     placeholder="E-Mail *"
                     style={{fontWeight: 400}}
@@ -923,6 +985,7 @@ ${firstName} ${lastName}`);
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    onFocus={() => { isUserInteracting.current = true; }}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all"
                     placeholder="Telefon *"
                     style={{fontWeight: 400}}
@@ -930,7 +993,7 @@ ${firstName} ${lastName}`);
                   />
                   <button
                     onClick={handleMailto}
-                    className="w-full py-4 text-white rounded-xl transition-all shadow-lg hover:shadow-xl"
+                    className="w-full py-4 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
                     style={{backgroundColor: ELCO_RED, fontWeight: 700}}
                   >
                     📧 E-Mail-Anfrage öffnen
@@ -947,7 +1010,7 @@ ${firstName} ${lastName}`);
               <h3 className="text-sm text-gray-900 mb-3" style={{fontWeight: 700}}>
                 Versand & Lieferung
               </h3>
-              <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                 <div>
                   <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Versandkosten</div>
                   <div className="text-gray-900" style={{fontWeight: 400}}>
@@ -978,7 +1041,7 @@ ${firstName} ${lastName}`);
       
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed bottom-6 right-6 bg-white rounded-2xl shadow-2xl p-6 max-w-sm border border-gray-100">
+        <div className="fixed bottom-6 right-6 bg-white rounded-2xl shadow-2xl p-6 max-w-sm border border-gray-100 z-50 animate-[slideIn_0.3s_ease-out]">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
