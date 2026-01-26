@@ -381,9 +381,9 @@ ${firstName} ${lastName}`);
   const isPriceAvailable = priceResult && !priceResult.error;
   
   return (
-    <div className="bg-gradient-to-b from-white to-gray-50 p-4 sm:p-6 lg:p-8" 
+    <div className="bg-gradient-to-b from-white to-gray-50 min-h-screen" 
       style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
-      <div className="max-w-4xl mx-auto">
+      <div className="p-4 sm:p-6 lg:p-8">
         
         {/* Configuration Section - Always Expanded */}
         <div className="mb-8">
@@ -891,28 +891,28 @@ ${firstName} ${lastName}`);
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Toast Notification */}
-      {showToast && (
-        <div className="fixed bottom-6 right-6 bg-white rounded-2xl shadow-2xl p-6 max-w-sm border border-gray-100 z-50">
-          <div className="flex items-start">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                </svg>
+        
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed bottom-6 right-6 bg-white rounded-2xl shadow-2xl p-6 max-w-sm border border-gray-100 z-50">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                </div>
               </div>
-            </div>
-            <div className="ml-4">
-              <div className="text-gray-900" style={{fontWeight: 700}}>E-Mail geöffnet</div>
-              <div className="text-sm text-gray-500 mt-1" style={{fontWeight: 400}}>
-                Bitte Logo anhängen und versenden
+              <div className="ml-4">
+                <div className="text-gray-900" style={{fontWeight: 700}}>E-Mail geöffnet</div>
+                <div className="text-sm text-gray-500 mt-1" style={{fontWeight: 400}}>
+                  Bitte Logo anhängen und versenden
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
