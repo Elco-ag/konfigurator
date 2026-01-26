@@ -403,38 +403,6 @@ export default function PapiertragetaschenKalkulator() {
     };
   }, []);
   
-  // iFrame Height Communication - sendet Höhe an Parent Window
-  useEffect(() => {
-    const sendHeight = () => {
-      const height = document.documentElement.scrollHeight;
-      
-      // Sende Höhe an Parent Window (nur wenn in iFrame)
-      if (window.parent !== window) {
-        window.parent.postMessage({
-          type: 'IFRAME_HEIGHT',
-          height: height
-        }, '*');
-      }
-    };
-    
-    // Sende initial und bei jedem State-Change
-    sendHeight();
-    
-    // Listener für GET_HEIGHT Anfragen vom Parent
-    const handleMessage = (event) => {
-      if (event.data && event.data.type === 'GET_HEIGHT') {
-        sendHeight();
-      }
-    };
-    
-    window.addEventListener('message', handleMessage);
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, [handle, color, format, print, qty, showContactForm, priceResult]);
-  
   const handleMailto = () => {
     if (!company || !firstName || !lastName || !email || !phone) {
       alert('Bitte alle Pflichtfelder ausfüllen');
@@ -460,7 +428,7 @@ export default function PapiertragetaschenKalkulator() {
     }
     
     const subject = encodeURIComponent('Anfrage Papiertragetasche mit Logo via Konfigurator');
-    const body = encodeURIComponent(`Guten Tag ELCO Team
+    const body = encodeURIComponent(`Guten Tag liebes ELCO Team
 
 Ich interessiere mich für bedruckte Papiertragetaschen mit meinem Logo und bitte um ein Angebot mit Proof.
 
