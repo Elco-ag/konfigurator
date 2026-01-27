@@ -381,9 +381,15 @@ ${firstName} ${lastName}`);
   const isPriceAvailable = priceResult && !priceResult.error;
   
   return (
-    <div className="bg-gradient-to-b from-white to-gray-50 min-h-screen" 
-      style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'}}>
-      <div className="p-4 sm:p-6 lg:p-8">
+    <div className="bg-gradient-to-b from-white to-gray-50" 
+      style={{
+        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', 
+        minHeight: '100vh', 
+        padding: 0, 
+        margin: 0,
+        overflow: 'visible'
+      }}>
+      <div style={{padding: '16px', maxWidth: '800px', margin: 0}}>
         
         {/* Configuration Section - Always Expanded */}
         <div className="mb-8">
