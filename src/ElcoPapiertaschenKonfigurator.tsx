@@ -251,6 +251,7 @@ export default function PapiertragetaschenKalkulator() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [logoDescription, setLogoDescription] = useState('');
   const [showToast, setShowToast] = useState(false);
   
   const priceResult = handle && color && format && print && qty && parseInt(qty) >= 50
@@ -305,8 +306,8 @@ export default function PapiertragetaschenKalkulator() {
   }, [qty]);
   
   const handleMailto = () => {
-    if (!company || !firstName || !lastName || !email || !phone) {
-      alert('Bitte alle Pflichtfelder ausfüllen');
+    if (!company || !firstName || !lastName || !email || !phone || !logoDescription.trim()) {
+      alert('Bitte alle Pflichtfelder ausfüllen (inkl. Logo-Beschreibung)');
       return;
     }
     
@@ -347,6 +348,10 @@ Farbe: ${color === 'braun' ? 'Braun' : 'Weiss'}
 Format: ${format} cm (${sizeLabel})
 Druckart: ${print === '1/0' ? 'Einseitig 1-farbig' : 'Beidseitig 1-farbig'}
 Menge: ${qty} Stück
+
+LOGO-PLATZIERUNG & GRÖSSE:
+--------------------------
+${logoDescription}
 
 PREISKALKULATION:
 -----------------
@@ -805,6 +810,25 @@ ${firstName} ${lastName}`);
               {!isPriceAvailable && <span className="text-sm text-gray-500 ml-2 font-normal">(Bitte zuerst Konfiguration abschliessen)</span>}
             </h3>
             <div className="space-y-4">
+              {/* Logo Description Field - FIRST */}
+              <div>
+                <label className="block text-sm text-gray-700 mb-2" style={{fontWeight: 700}}>
+                  Logo-Platzierung & Grösse *
+                </label>
+                <textarea
+                  value={logoDescription}
+                  onChange={(e) => isPriceAvailable && setLogoDescription(e.target.value)}
+                  disabled={!isPriceAvailable}
+                  rows="3"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all disabled:cursor-not-allowed resize-none"
+                  placeholder="z.B. Logo mittelgross, zentriert auf der Vorderseite"
+                  style={{fontWeight: 400}}
+                />
+                <p className="mt-1 text-xs text-gray-500" style={{fontWeight: 400}}>
+                  💡 Beschreiben Sie die gewünschte Grösse und Position Ihres Logos
+                </p>
+              </div>
+              
               <input
                 type="text"
                 value={company}
