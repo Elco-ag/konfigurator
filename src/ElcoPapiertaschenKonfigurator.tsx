@@ -372,7 +372,7 @@ Bitte senden Sie mir innert 24 Stunden einen digitalen Proof zur Freigabe.
 Mit freundlichen Grüssen
 ${firstName} ${lastName}`);
     
-    window.location.href = `mailto:business@elcoworld.ch?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:busness@myelco.ch?subject=${subject}&body=${body}`;
     
     setShowToast(true);
     setTimeout(() => setShowToast(false), 5000);
