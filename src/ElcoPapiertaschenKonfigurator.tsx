@@ -251,6 +251,7 @@ export default function PapiertragetaschenKalkulator() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
   const [logoDescription, setLogoDescription] = useState('');
   const [showToast, setShowToast] = useState(false);
   
@@ -306,8 +307,8 @@ export default function PapiertragetaschenKalkulator() {
   }, [qty]);
   
   const handleMailto = () => {
-    if (!company || !firstName || !lastName || !email || !phone || !logoDescription.trim()) {
-      alert('Bitte alle Pflichtfelder ausfüllen (inkl. Logo-Beschreibung)');
+    if (!company || !firstName || !lastName || !email || !phone || !address || !logoDescription.trim()) {
+      alert('Bitte alle Pflichtfelder ausfüllen (inkl. Adresse und Logo-Beschreibung)');
       return;
     }
     
@@ -330,9 +331,9 @@ export default function PapiertragetaschenKalkulator() {
     }
     
     const subject = encodeURIComponent('Anfrage Papiertragetasche mit Logo via Konfigurator');
-    const body = encodeURIComponent(`Guten Tag liebes ELCO Team
+    const body = encodeURIComponent(`Guten Tag ELCO Team
 
-Ich interessiere mich für bedruckte Papiertragetaschen mit meinem Logo und bitte um ein Angebot mit Gut zum Druck.
+Ich interessiere mich für bedruckte Papiertragetaschen mit meinem Logo und bitte um ein Angebot mit Proof.
 
 ========================================
 ⚠️ WICHTIG: LOGO-ANHANG ⚠️
@@ -363,16 +364,17 @@ Total: ${formatPriceCHF(priceResult.total)} exkl. MwSt.
 KONTAKTDATEN:
 -------------
 Firma: ${company}
+Adresse: ${address}
 Ansprechperson: ${firstName} ${lastName}
 Telefon: ${phone}
 E-Mail: ${email}
 
 Bitte senden Sie mir innert 24 Stunden einen digitalen Proof zur Freigabe.
 
-Freundliche Grüsse
+Mit freundlichen Grüssen
 ${firstName} ${lastName}`);
     
-    window.location.href = `mailto:business@myelco.ch?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:busness@myelco.ch?subject=${subject}&body=${body}`;
     
     setShowToast(true);
     setTimeout(() => setShowToast(false), 5000);
@@ -838,6 +840,15 @@ ${firstName} ${lastName}`);
                 placeholder="Firma *"
                 style={{fontWeight: 400}}
               />
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => isPriceAvailable && setAddress(e.target.value)}
+                disabled={!isPriceAvailable}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all disabled:cursor-not-allowed"
+                placeholder="Adresse (Strasse, PLZ, Ort) *"
+                style={{fontWeight: 400}}
+              />
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -946,6 +957,3 @@ ${firstName} ${lastName}`);
     </div>
   );
 }
-
-
-
