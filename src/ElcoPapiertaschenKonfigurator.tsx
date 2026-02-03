@@ -330,9 +330,9 @@ export default function PapiertragetaschenKalkulator() {
     }
     
     const subject = encodeURIComponent('Anfrage Papiertragetasche mit Logo via Konfigurator');
-    const body = encodeURIComponent(`Guten Tag ELCO Team
+    const body = encodeURIComponent(`Guten Tag liebes ELCO Team
 
-Ich interessiere mich für bedruckte Papiertragetaschen mit meinem Logo und bitte um ein Angebot mit Proof.
+Ich interessiere mich für bedruckte Papiertragetaschen mit meinem Logo und bitte um ein Angebot mit Gut zum Druck.
 
 ========================================
 ⚠️ WICHTIG: LOGO-ANHANG ⚠️
@@ -369,7 +369,7 @@ E-Mail: ${email}
 
 Bitte senden Sie mir innert 24 Stunden einen digitalen Proof zur Freigabe.
 
-Mit freundlichen Grüssen
+Freundliche Grüsse
 ${firstName} ${lastName}`);
     
     window.location.href = `mailto:business@myelco.ch?subject=${subject}&body=${body}`;
@@ -946,5 +946,6 @@ ${firstName} ${lastName}`);
     </div>
   );
 }
+
 
 
