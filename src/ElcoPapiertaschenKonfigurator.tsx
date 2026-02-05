@@ -387,6 +387,9 @@ ${firstName} ${lastName}`);
   const isConfigComplete = handle && color && format && print && qty && !qtyError;
   const isPriceAvailable = priceResult && !priceResult.error;
   
+  // Prüfung für Grossauflagen-Meldung: entweder über 2000 ODER bei 2000 und beidseitig
+  const showLargeOrderMessage = parseInt(qty) > 2000 || (parseInt(qty) >= 2000 && print === '1/1');
+  
   return (
     <div className="bg-gradient-to-b from-white to-gray-50" 
       style={{
@@ -661,7 +664,7 @@ ${firstName} ${lastName}`);
                   ✓ Gültige Menge
                 </p>
               )}
-              {parseInt(qty) > 2000 && !qtyError && (
+              {showLargeOrderMessage && !qtyError && (
                 <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
                   <div className="flex items-start">
                     <span className="text-blue-600 mr-2 text-lg">📞</span>
@@ -920,6 +923,7 @@ ${firstName} ${lastName}`);
               <div className="text-gray-600 mb-1" style={{fontWeight: 700}}>Lieferzeit</div>
               <div className="text-gray-900" style={{fontWeight: 400}}>
                 5-7 Arbeitstage<br/>
+                ab Freigabe<br/>
                 Express möglich
               </div>
             </div>
