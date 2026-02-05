@@ -387,8 +387,8 @@ ${firstName} ${lastName}`);
   const isConfigComplete = handle && color && format && print && qty && !qtyError;
   const isPriceAvailable = priceResult && !priceResult.error;
   
-  // Prüfung für Grossauflagen-Meldung: entweder über 2000 ODER bei 2000 und beidseitig
-  const showLargeOrderMessage = parseInt(qty) > 2000 || (parseInt(qty) >= 2000 && print === '1/1');
+  // Prüfung für Grossauflagen-Meldung: ab 1500 Stück bei beidseitig (1/1) ODER über 1500 Stück generell
+  const showLargeOrderMessage = (parseInt(qty) >= 1500 && print === '1/1') || parseInt(qty) > 1500;
   
   return (
     <div className="bg-gradient-to-b from-white to-gray-50" 
@@ -673,7 +673,7 @@ ${firstName} ${lastName}`);
                         Grossauflage erkannt
                       </p>
                       <p className="text-sm text-blue-800 mb-3" style={{fontWeight: 400}}>
-                        Für Auflagen über 2'000 Stück bieten wir Ihnen individuelle Preise und erweiterte Optionen.
+                        Für Auflagen über 1'500 Stück bieten wir Ihnen individuelle Preise und erweiterte Optionen.
                       </p>
                       <p className="text-sm text-blue-900" style={{fontWeight: 700}}>
                         Kontakt:
