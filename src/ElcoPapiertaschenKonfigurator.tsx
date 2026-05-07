@@ -7,21 +7,14 @@ import React, { useState, useEffect } from 'react';
 const T = {
   de: {
     // Steps
-    step1: '1. Henkelform',
-    step2: '2. Farbe',
-    step3: '3. Format & Grösse',
-    step4: '4. Druckart',
-    step5: '5. Menge',
+    step1: '1. Farbe',
+    step2: '2. Format & Grösse',
+    step3: '3. Druckart',
+    step4: '4. Menge',
     // Step hints
-    hint_handle: '(Bitte zuerst Henkelform wählen)',
     hint_color: '(Bitte zuerst Farbe wählen)',
     hint_format: '(Bitte zuerst Format wählen)',
     hint_print: '(Bitte zuerst Druckart wählen)',
-    // Handle
-    flat: 'Flachhenkel',
-    flat_desc: 'Klassisch & bewährt',
-    cord: 'Kordelhenkel',
-    cord_desc: 'Premium & elegant',
     // Color
     brown: 'Braun',
     brown_desc: 'Natürlich & nachhaltig',
@@ -61,8 +54,6 @@ const T = {
     price_placeholder_title: 'Bitte Konfiguration abschliessen',
     price_placeholder_text: 'Wählen Sie alle Optionen aus, um den Preis zu berechnen',
     // Handle labels for summary
-    handle_flat_short: 'Flach',
-    handle_cord_short: 'Kordel',
     color_brown_short: 'Braun',
     color_white_short: 'Weiss',
     // Contact form
@@ -115,7 +106,7 @@ Als PDF, AI, EPS oder hochauflösendes PNG.
 
 MEINE KONFIGURATION:
 --------------------
-Henkelform: ${cfg.handleLabel}
+Henkelform: Flachhenkel
 Farbe: ${cfg.colorLabel}
 Format: ${cfg.format} cm (${cfg.sizeLabel})
 Druckart: ${cfg.printLabel}
@@ -152,19 +143,13 @@ ${cfg.firstName} ${cfg.lastName}`,
     ship_surcharge_suffix: ' Kleinmengenzuschlag',
   },
   fr: {
-    step1: '1. Type de poignée',
-    step2: '2. Couleur',
-    step3: '3. Format & taille',
-    step4: '4. Type d\'impression',
-    step5: '5. Quantité',
-    hint_handle: '(Veuillez d\'abord choisir le type de poignée)',
+    step1: '1. Couleur',
+    step2: '2. Format & taille',
+    step3: '3. Type d\'impression',
+    step4: '4. Quantité',
     hint_color: '(Veuillez d\'abord choisir la couleur)',
     hint_format: '(Veuillez d\'abord choisir le format)',
     hint_print: '(Veuillez d\'abord choisir le type d\'impression)',
-    flat: 'Poignée plate',
-    flat_desc: 'Classique & éprouvée',
-    cord: 'Poignée cordelette',
-    cord_desc: 'Premium & élégante',
     brown: 'Brun',
     brown_desc: 'Naturel & durable',
     white: 'Blanc',
@@ -197,8 +182,6 @@ ${cfg.firstName} ${cfg.lastName}`,
     savings_text: (tier, pct) => `À ${tier} pièces, vous économisez ${pct}% par pièce`,
     price_placeholder_title: 'Veuillez compléter la configuration',
     price_placeholder_text: 'Sélectionnez toutes les options pour calculer le prix',
-    handle_flat_short: 'Plate',
-    handle_cord_short: 'Cordelette',
     color_brown_short: 'Brun',
     color_white_short: 'Blanc',
     contact_title: 'Demander maintenant',
@@ -247,7 +230,7 @@ En format PDF, AI, EPS ou PNG haute résolution.
 
 MA CONFIGURATION :
 ------------------
-Type de poignée : ${cfg.handleLabel}
+Type de poignée : Poignée plate
 Couleur : ${cfg.colorLabel}
 Format : ${cfg.format} cm (${cfg.sizeLabel})
 Type d'impression : ${cfg.printLabel}
@@ -285,7 +268,7 @@ ${cfg.firstName} ${cfg.lastName}`,
 };
 
 // ============================================================================
-// PRICE DATA
+// PRICE DATA - Only Flachhenkel
 // ============================================================================
 
 const PRICE_DATA = {
@@ -366,62 +349,6 @@ const PRICE_DATA = {
           "1/1": { 50: 2.79, 200: 2.04, 500: 1.59, 1000: 1.44, 2000: 1.27, 5000: 1.21 }
         }
       }
-    },
-    kordelhenkel: {
-      braun: {
-        "18x8x24": {
-          size_label: "Small / 84101.25",
-          "1/0": { 50: 1.80, 200: 1.30, 500: 1.00, 1000: 0.90, 2000: 0.80, 5000: 0.77 },
-          "1/1": { 50: 2.60, 200: 1.85, 500: 1.40, 1000: 1.25, 2000: 1.08, 5000: 1.03 }
-        },
-        "22x10x29": {
-          size_label: "Medium / 84102.25",
-          "1/0": { 50: 1.85, 200: 1.35, 500: 1.05, 1000: 0.95, 2000: 0.86, 5000: 0.82 },
-          "1/1": { 50: 2.65, 200: 1.90, 500: 1.45, 1000: 1.30, 2000: 1.13, 5000: 1.07 }
-        },
-        "27x12x37": {
-          size_label: "Large / 84103.25",
-          "1/0": { 50: 1.95, 200: 1.45, 500: 1.15, 1000: 1.05, 2000: 0.95, 5000: 0.92 },
-          "1/1": { 50: 2.75, 200: 2.00, 500: 1.55, 1000: 1.40, 2000: 1.23, 5000: 1.16 }
-        },
-        "40x12x31": {
-          size_label: "Large Landscape / 84205.25",
-          "1/0": { 50: 2.04, 200: 1.54, 500: 1.24, 1000: 1.14, 2000: 1.04, 5000: 1.01 },
-          "1/1": { 50: 2.84, 200: 2.09, 500: 1.64, 1000: 1.49, 2000: 1.32, 5000: 1.25 }
-        },
-        "32x13x41": {
-          size_label: "X-Large / 84104.25",
-          "1/0": { 50: 2.00, 200: 1.50, 500: 1.20, 1000: 1.10, 2000: 1.01, 5000: 0.97 },
-          "1/1": { 50: 2.80, 200: 2.05, 500: 1.60, 1000: 1.45, 2000: 1.28, 5000: 1.22 }
-        }
-      },
-      weiss: {
-        "18x8x24": {
-          size_label: "Small / 84101.10",
-          "1/0": { 50: 1.80, 200: 1.30, 500: 1.00, 1000: 0.90, 2000: 0.80, 5000: 0.77 },
-          "1/1": { 50: 2.60, 200: 1.85, 500: 1.40, 1000: 1.25, 2000: 1.08, 5000: 1.03 }
-        },
-        "22x10x29": {
-          size_label: "Medium / 84102.10",
-          "1/0": { 50: 1.85, 200: 1.35, 500: 1.05, 1000: 0.95, 2000: 0.86, 5000: 0.82 },
-          "1/1": { 50: 2.65, 200: 1.90, 500: 1.45, 1000: 1.30, 2000: 1.13, 5000: 1.07 }
-        },
-        "27x12x37": {
-          size_label: "Large / 84103.10",
-          "1/0": { 50: 1.95, 200: 1.45, 500: 1.15, 1000: 1.05, 2000: 0.95, 5000: 0.92 },
-          "1/1": { 50: 2.75, 200: 2.00, 500: 1.55, 1000: 1.40, 2000: 1.23, 5000: 1.16 }
-        },
-        "40x12x31": {
-          size_label: "Large Landscape / 84205.10",
-          "1/0": { 50: 2.04, 200: 1.54, 500: 1.24, 1000: 1.14, 2000: 1.04, 5000: 1.01 },
-          "1/1": { 50: 2.84, 200: 2.09, 500: 1.64, 1000: 1.49, 2000: 1.32, 5000: 1.25 }
-        },
-        "32x13x41": {
-          size_label: "X-Large / 84104.10",
-          "1/0": { 50: 2.00, 200: 1.50, 500: 1.20, 1000: 1.10, 2000: 1.01, 5000: 0.97 },
-          "1/1": { 50: 2.80, 200: 2.05, 500: 1.60, 1000: 1.45, 2000: 1.28, 5000: 1.22 }
-        }
-      }
     }
   }
 };
@@ -441,7 +368,7 @@ function chooseTier(qty, rules) {
 }
 
 function calcPrice(selection, priceData) {
-  const { handle, color, format, print, qty } = selection;
+  const { color, format, print, qty } = selection;
   const { rules, data } = priceData;
   
   if (qty < rules.min_qty) {
@@ -454,7 +381,7 @@ function calcPrice(selection, priceData) {
   }
   
   try {
-    const product = data[handle]?.[color]?.[format];
+    const product = data.flachhenkel?.[color]?.[format];
     if (!product) {
       return { error: 'no_product' };
     }
@@ -543,7 +470,6 @@ export default function PapiertragetaschenKalkulator() {
   });
   const t = T[lang];
   
-  const [handle, setHandle] = useState(null);
   const [color, setColor] = useState(null);
   const [format, setFormat] = useState(null);
   const [print, setPrint] = useState(null);
@@ -559,16 +485,16 @@ export default function PapiertragetaschenKalkulator() {
   const [logoDescription, setLogoDescription] = useState('');
   const [showToast, setShowToast] = useState(false);
   
-  const priceResult = handle && color && format && print && qty && parseInt(qty) >= 50
-    ? calcPrice({ handle, color, format, print, qty: parseInt(qty) }, PRICE_DATA)
+  const priceResult = color && format && print && qty && parseInt(qty) >= 50
+    ? calcPrice({ color, format, print, qty: parseInt(qty) }, PRICE_DATA)
     : null;
   
-  const availableFormats = handle && color 
-    ? Object.keys(PRICE_DATA.data[handle]?.[color] || {})
+  const availableFormats = color 
+    ? Object.keys(PRICE_DATA.data.flachhenkel?.[color] || {})
         .map(fmt => ({
           value: fmt,
           label: `${fmt.replace(/x/g, '×')} cm`,
-          sizeLabel: PRICE_DATA.data[handle][color][fmt]?.size_label || ''
+          sizeLabel: PRICE_DATA.data.flachhenkel[color][fmt]?.size_label || ''
         }))
         .sort((a, b) => {
           const [w1] = a.value.split('x').map(Number);
@@ -576,10 +502,6 @@ export default function PapiertragetaschenKalkulator() {
           return w1 - w2;
         })
     : [];
-  
-  useEffect(() => {
-    setColor(null); setFormat(null); setPrint(null); setQty('');
-  }, [handle]);
   
   useEffect(() => {
     setFormat(null); setPrint(null); setQty('');
@@ -609,12 +531,13 @@ export default function PapiertragetaschenKalkulator() {
       alert(t.alert_fields);
       return;
     }
+    
     if (!priceResult || priceResult.error) {
       alert(t.alert_config);
       return;
     }
     
-    const productInfo = PRICE_DATA.data[handle][color][format];
+    const productInfo = PRICE_DATA.data.flachhenkel[color][format];
     const sizeLabel = productInfo?.size_label || '';
     
     let shippingText = '';
@@ -627,12 +550,11 @@ export default function PapiertragetaschenKalkulator() {
       }
     }
     
-    const handleLabel = handle === 'flachhenkel' ? t.flat : t.cord;
     const colorLabel = color === 'braun' ? t.brown : t.white;
     const printLabel = print === '1/0' ? t.print_one_long : t.print_both_long;
     
     const cfg = {
-      handleLabel, colorLabel, format, sizeLabel, printLabel,
+      colorLabel, format, sizeLabel, printLabel,
       qty, logoDescription,
       unitPrice: formatPriceCHF(priceResult.unit),
       subtotal: formatPriceCHF(priceResult.subtotal),
@@ -698,52 +620,14 @@ export default function PapiertragetaschenKalkulator() {
         <div className="mb-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
             
-            {/* 1. Handle */}
+            {/* 1. Color */}
             <div className="p-6 border-b border-gray-100">
               <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
                 {t.step1}
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <button
-                  onClick={() => setHandle('flachhenkel')}
-                  className={`relative p-6 rounded-xl transition-all border-2 ${
-                    handle === 'flachhenkel' 
-                      ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
-                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
-                  }`}
-                  style={handle === 'flachhenkel' ? {borderColor: ELCO_RED} : {}}
-                >
-                  <span className="text-2xl mb-2 block">🛍️</span>
-                  <div style={{fontWeight: 700}}>{t.flat}</div>
-                  <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>{t.flat_desc}</div>
-                  {handle === 'flachhenkel' && <CheckIcon />}
-                </button>
-                <button
-                  onClick={() => setHandle('kordelhenkel')}
-                  className={`relative p-6 rounded-xl transition-all border-2 ${
-                    handle === 'kordelhenkel' 
-                      ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
-                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-transparent'
-                  }`}
-                  style={handle === 'kordelhenkel' ? {borderColor: ELCO_RED} : {}}
-                >
-                  <span className="text-2xl mb-2 block">🛍️</span>
-                  <div style={{fontWeight: 700}}>{t.cord}</div>
-                  <div className="text-xs mt-1 text-gray-600" style={{fontWeight: 400}}>{t.cord_desc}</div>
-                  {handle === 'kordelhenkel' && <CheckIcon />}
-                </button>
-              </div>
-            </div>
-            
-            {/* 2. Color */}
-            <div className={`p-6 border-b border-gray-100 transition-opacity ${!handle ? 'opacity-40 pointer-events-none' : ''}`}>
-              <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                {t.step2} {!handle && <span className="text-xs normal-case">{t.hint_handle}</span>}
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  onClick={() => handle && setColor('braun')}
-                  disabled={!handle}
+                  onClick={() => setColor('braun')}
                   className={`relative p-6 rounded-xl transition-all border-2 ${
                     color === 'braun' 
                       ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
@@ -757,8 +641,7 @@ export default function PapiertragetaschenKalkulator() {
                   {color === 'braun' && <CheckIcon />}
                 </button>
                 <button
-                  onClick={() => handle && setColor('weiss')}
-                  disabled={!handle}
+                  onClick={() => setColor('weiss')}
                   className={`relative p-6 rounded-xl transition-all border-2 ${
                     color === 'weiss' 
                       ? 'bg-green-50 shadow-lg transform scale-[1.02]' 
@@ -774,10 +657,10 @@ export default function PapiertragetaschenKalkulator() {
               </div>
             </div>
             
-            {/* 3. Format */}
+            {/* 2. Format */}
             <div className={`p-6 border-b border-gray-100 transition-opacity ${!color ? 'opacity-40 pointer-events-none' : ''}`}>
               <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                {t.step3} {!color && <span className="text-xs normal-case">{t.hint_color}</span>}
+                {t.step2} {!color && <span className="text-xs normal-case">{t.hint_color}</span>}
               </h3>
               <select
                 value={format || ''}
@@ -803,10 +686,10 @@ export default function PapiertragetaschenKalkulator() {
               )}
             </div>
             
-            {/* 4. Print */}
+            {/* 3. Print */}
             <div className={`p-6 border-b border-gray-100 transition-opacity ${!format ? 'opacity-40 pointer-events-none' : ''}`}>
               <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                {t.step4} {!format && <span className="text-xs normal-case">{t.hint_format}</span>}
+                {t.step3} {!format && <span className="text-xs normal-case">{t.hint_format}</span>}
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <button
@@ -840,10 +723,10 @@ export default function PapiertragetaschenKalkulator() {
               </div>
             </div>
             
-            {/* 5. Quantity */}
+            {/* 4. Quantity */}
             <div className={`p-6 transition-opacity ${!print ? 'opacity-40 pointer-events-none' : ''}`}>
               <h3 className="text-sm text-gray-500 uppercase tracking-wider mb-4" style={{fontWeight: 700}}>
-                {t.step5} {!print && <span className="text-xs normal-case">{t.hint_print}</span>}
+                {t.step4} {!print && <span className="text-xs normal-case">{t.hint_print}</span>}
               </h3>
               <div className="flex flex-wrap gap-2 mb-4">
                 {[50, 100, 200, 500, 1000, 2000].map(tier => (
@@ -934,7 +817,7 @@ export default function PapiertragetaschenKalkulator() {
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600" style={{fontWeight: 400}}>{t.config_label}</span>
                       <span className="text-gray-900" style={{fontWeight: 700}}>
-                        {handle === 'flachhenkel' ? t.handle_flat_short : t.handle_cord_short} • {color === 'braun' ? t.color_brown_short : t.color_white_short} • {print}
+                        {color === 'braun' ? t.color_brown_short : t.color_white_short} • {print}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -956,18 +839,21 @@ export default function PapiertragetaschenKalkulator() {
                       <span className="text-gray-500" style={{fontWeight: 400}}>{t.subtotal}</span>
                       <span className="text-gray-900" style={{fontWeight: 700}}>{formatPriceCHF(priceResult.subtotal)}</span>
                     </div>
+                    
                     {priceResult.shipping > 0 && (
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500" style={{fontWeight: 400}}>{t.shipping_label}</span>
                         <span className="text-gray-700" style={{fontWeight: 400}}>+ {formatPriceCHF(priceResult.shipping)}</span>
                       </div>
                     )}
+                    
                     {priceResult.smallQtySurcharge > 0 && (
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500" style={{fontWeight: 400}}>{t.surcharge}</span>
                         <span className="text-orange-600" style={{fontWeight: 400}}>+ {formatPriceCHF(priceResult.smallQtySurcharge)}</span>
                       </div>
                     )}
+                    
                     {priceResult.shipping === 0 && (
                       <div className="flex items-center text-sm text-green-600 bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2 rounded-lg border border-green-200">
                         <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -1035,6 +921,7 @@ export default function PapiertragetaschenKalkulator() {
                 />
                 <p className="mt-1 text-xs text-gray-500" style={{fontWeight: 400}}>{t.logo_hint}</p>
               </div>
+              
               <input type="text" value={company} onChange={(e) => isPriceAvailable && setCompany(e.target.value)} disabled={!isPriceAvailable}
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 focus:bg-white transition-all disabled:cursor-not-allowed"
                 placeholder={t.company_ph} style={{fontWeight: 400}} />
